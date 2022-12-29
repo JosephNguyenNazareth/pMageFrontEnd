@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
-import { EmployeeService } from './employee.service';
+import { ConnectorService } from './connector.service';
 
 @NgModule({
   declarations: [
@@ -14,7 +14,7 @@ import { EmployeeService } from './employee.service';
     BrowserModule,
     HttpClientModule, FormsModule
   ],
-  providers: [EmployeeService],
+  providers: [ConnectorService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

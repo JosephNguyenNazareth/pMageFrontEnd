@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Employee } from './employee';
-import { EmployeeService } from './employee.service';
+import { Connector } from './connector';
+import { ConnectorService } from './connector.service';
+import { UserPMage } from './interface/userpmage';
 
 @Component({
   selector: 'app-root',
@@ -10,20 +11,20 @@ import { EmployeeService } from './employee.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  public employees: Employee[] = [];
-  public editEmployee!: Employee;
-  public deleteEmployee!: Employee;
+  public connectorList: Connector[] = [];
+  public editConnector!: Connector;
+  public deleteConnector!: Connector;
 
-  constructor(private employeeService: EmployeeService) { }
+  constructor(private connectorService: ConnectorService) { }
 
   ngOnInit(): void {
-    this.getEmployees();
+    this.getConnectors();
   }
 
-  public getEmployees(): void {
-    this.employeeService.getEmployees().subscribe(
-      (response: Employee[]) => {
-        this.employees = response;
+  public getConnectors(): void {
+    this.connectorService.getConnectors().subscribe(
+      (response: Connector[]) => {
+        this.connectorList = response;
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -31,12 +32,12 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onAddEmployee(addForm: NgForm): void {
-    document.getElementById('add-employee-form')?.click();
-    this.employeeService.addEmployee(addForm.value).subscribe(
-      (response: Employee) => {
+  public onAddConnector(addForm: NgForm): void {
+    document.getElementById('add-connector-form')?.click();
+    this.connectorService.addConnector(addForm.value).subscribe(
+      (response: string) => {
         console.log(response);
-        this.getEmployees();
+        this.getConnectors();
         addForm.reset();
       },
       (error: HttpErrorResponse) => {
@@ -46,11 +47,11 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onUpdateEmployee(employee: Employee): void {
-    this.employeeService.addEmployee(employee).subscribe(
-      (response: Employee) => {
+  public onUpdateConnector(connectorId: string, user: UserPMage): void {
+    this.connectorService.updateConnector(connectorId, user).subscribe(
+      (response: void) => {
         console.log(response);
-        this.getEmployees();
+        this.getConnectors();
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -58,12 +59,12 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onDeleteEmployee(employeeId?: number): void {
-    if (employeeId) {
-      this.employeeService.deleteEmployee(employeeId).subscribe(
+  public onDeleteEmployee(connectorId?: string): void {
+    if (connectorId) {
+      this.connectorService.deleteConnector(connectorId).subscribe(
         (response: void) => {
           console.log(response);
-          this.getEmployees();
+          this.getConnectors();
         },
         (error: HttpErrorResponse) => {
           alert(error.message);
@@ -72,25 +73,24 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public searchEmployees(key: string): void {
-    console.log(key);
-    const results: Employee[] = [];
-    for (const employee of this.employees) {
-      if (employee.name.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || employee.email.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || employee.phone.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || employee.jobTitle.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
-        results.push(employee);
+  public searchConnectors(key: string): void {
+    const results: Connector[] = [];
+    for (const connector of this.connectorList) {
+      if (connector.userPMage.realName.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.userPMage.pmsName.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.userPMage.userName.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.userPMage.originRepo.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        results.push(connector);
       }
     }
-    this.employees = results;
+    this.connectorList = results;
 
     if (results.length === 0 || !key) {
-      this.getEmployees();
+      this.getConnectors();
     }
   }
 
-  public onOpenModal(employee: Employee | null, mode: string): void {
+  public onOpenModal(connector: Connector | null, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
     button.type = 'button';
@@ -98,17 +98,17 @@ export class AppComponent implements OnInit {
     button.setAttribute('data-toggle', 'modal');
 
     if (mode === 'add') {
-      button.setAttribute('data-target', '#addEmployeeModal');
+      button.setAttribute('data-target', '#addConnectorModal');
     }
     if (mode === 'edit') {
-      if (employee)
-        this.editEmployee = employee;
-      button.setAttribute('data-target', '#updateEmployeeModal');
+      if (connector)
+        this.editConnector = connector;
+      button.setAttribute('data-target', '#updateConnectorModal');
     }
     if (mode === 'delete') {
-      if (employee)
-        this.deleteEmployee = employee;
-      button.setAttribute('data-target', '#deleteEmployeeModal');
+      if (connector)
+        this.deleteConnector = connector;
+      button.setAttribute('data-target', '#deleteConnectorModal');
     }
     container?.appendChild(button);
     button.click();

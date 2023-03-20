@@ -1,200 +1,359 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" style="color:white;">pMage</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02" aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
-  <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarColor02">
-     <ul class="navbar-nav mr-auto">
-        <li class="nav-item active">
-           <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Connector<span class="sr-only">(current)</span></a>
-        </li>
-     </ul>
-     <form class="form-inline my-2 my-lg-0">
-        <input type="search" (ngModelChange)="searchConnectors(key.value)" #key="ngModel" ngModel
-         name="key" id="searchName" class="form-control mr-sm-2" placeholder="Search connectors..." required>
-     </form>
-  </div>
+<nav class="navbar navbar-expand-lg navbar-dark bg-info">
+   <a class="navbar-brand" style="color:white;">pMage</a>
+   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor02"
+      aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+   </button>
+   <div class="collapse navbar-collapse" id="navbarColor02">
+      <!-- <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null, 'addUser')">Add User<span
+                  class="sr-only">(current)</span></a>
+         </li>
+      </ul> -->
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null, 'add')">Add Connector<span
+                  class="sr-only">(current)</span></a>
+         </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0">
+         <input type="search" (ngModelChange)="searchConnectors(key.value)" #key="ngModel" ngModel name="key"
+            id="searchName" class="form-control mr-sm-2" placeholder="Search connectors..." required>
+      </form>
+   </div>
 </nav>
 <div class="container" id="main-container">
-<div class="row">
-  <div *ngFor="let connector of connectorList" class="col-md-6 col-xl-3">
-     <div class="card m-b-30">
-        <div class="card-body row">
-           <div class="col-6 card-title align-self-center mb-0">
-              <h5>{{connector?.userPMage?.realName}}</h5>
-              <p class="m-0">{{connector?.userPMage?.userName}}</p>
-           </div>
-        </div>
-        <ul class="list-group list-group-flush">
-           <li class="list-group-item"><i class="fa float-right"></i>PMS: {{connector?.userPMage?.pmsName}}</li>
-           <li class="list-group-item"><i class="fa float-right"></i>Project : {{connector?.userPMage?.projectId}}</li>
-        </ul>
-        <ul class="list-group list-group-flush">
-         <li class="list-group-item"><i class="fa float-right"></i>Origin: {{connector?.userPMage?.originRepo}}</li>
-         <li class="list-group-item"><i class="fa float-right"></i>Project : {{connector?.userPMage?.repoRemote}}</li>
-      </ul>
-        <div class="card-body">
-           <div class="float-right btn-group btn-group-sm">
-              <a (click)="onOpenModal(connector, 'edit')" class="btn btn-primary tooltips" data-placement="top" data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
-              <a (click)="onOpenModal(connector, 'delete')" class="btn btn-secondary tooltips" data-placement="top" data-original-title="Delete"><i class="fa fa-times"></i></a>
-           </div>
-        </div>
-     </div>
-  </div>
-</div>
-
-<!-- Add Employee Modal -->
-<div class="modal fade" id="addConnectorModal" tabindex="-1" role="dialog" aria-labelledby="addConnectorModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-       <div class="modal-header">
-          <h5 class="modal-title" id="addConnectorModalLabel">Add Connector</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-          </button>
-       </div>
-       <div class="modal-body">
-          <form #addForm="ngForm" (ngSubmit)="onAddConnector(addForm)">
-          <div class="form-group">
-             <label for="name">Real Name</label>
-             <input type="text" ngModel name="realName" class="form-control" id="realName" placeholder="Real Name" required>
-          </div>
-          <div class="form-group">
-             <label for="email">Password</label>
-             <input type="password" ngModel name="Password" class="form-control" id="password" placeholder="Password" required>
-          </div>
-          <div class="form-group">
-             <label for="phone">PMS Name</label>
-             <input type="text" ngModel name="pmsName" class="form-control" id="pmsName" placeholder="PMS Name" required>
-          </div>
-          <div class="form-group">
-             <label for="phone">Project</label>
-             <input type="text" ngModel name="projectId" class="form-control" id="projectId" placeholder="Project ID">
-          </div>
-          <div class="form-group">
-            <label for="name">Username</label>
-            <input type="text" ngModel name="userName" class="form-control" id="userName" placeholder="Username" required>
-         </div>
-         <div class="form-group">
-            <label for="email">Personal Token</label>
-            <input type="password" ngModel name="personalToken" class="form-control" id="personalToken" placeholder="Personal Token" required>
-         </div>
-         <div class="form-group">
-            <label for="phone">Origin Repository</label>
-            <input type="text" ngModel name="originRepo" class="form-control" id="originRepo" placeholder="Origin Repository" required>
-         </div>
-         <div class="form-group">
-            <label for="phone">Project Remote Link</label>
-            <input type="text" ngModel name="repoRemote" class="form-control" id="repoRemote" placeholder="Project Remote Link">
-         </div>
-         <div class="form-group">
-            <label for="phone">Project Local Directory</label>
-            <input type="text" ngModel name="repoLocal" class="form-control" id="repoLocal" placeholder="Project Local Directory">
-         </div>
-          <div class="modal-footer">
-             <button type="button" id="add-connector-form" class="btn btn-secondary" data-dismiss="modal">Close</button>
-             <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" >Save changes</button>
-          </div>
-          </form>
-       </div>
-    </div>
-  </div>
-  </div>
-
-<!-- Edit Modal -->
-<div class="modal fade" id="updateConnectorModal" tabindex="-1" role="dialog" aria-labelledby="employeeEditModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-     <div class="modal-content">
-        <div class="modal-header">
-           <h5 class="modal-title" id="updateConnectorModalLabel">Edit Connector {{editConnector?.userPMage?.realName}}</h5>
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-           </button>
-        </div>
-        <div class="modal-body">
-           <form #editForm="ngForm">
-              <div class="form-group">
-                 <label for="realName">Real Name</label>
-                 <input type="text" ngModel="{{editConnector?.userPMage?.realName}}" name="realName" class="form-control" id="realName" placeholder="Real Name">
-              </div>
-
-              <input type="hidden" ngModel="{{editConnector?.id}}" name="id" class="form-control" id="id" placeholder="Id">
-
-              <div class="form-group">
-                  <label for="password">Password</label>
-                  <input type="password" ngModel="{{editConnector?.userPMage?.password}}" name="password" class="form-control" id="password" placeholder="Password">
-              </div>
-
-              <div class="form-group">
-                 <label for="pmsName">PMS Name</label>
-                 <input type="text" ngModel="{{editConnector?.userPMage?.pmsName}}" name="pmsName" class="form-control" id="pmsName" placeholder="PMS Name">
-              </div>
-
-              <div class="form-group">
-                 <label for="projectId">Project</label>
-                 <input type="text" ngModel="{{editConnector?.userPMage?.projectId}}" name="projectId" class="form-control" id="projectId" placeholder="Project Id">
-              </div>
-
-              <div class="form-group">
-               <label for="userName">Username</label>
-               <input type="text" ngModel="{{editConnector?.userPMage?.userName}}" name="userName" class="form-control" id="userName" placeholder="Username">
+   <div class="row">
+      <div *ngFor="let connector of connectorList" class="col-md-6 col-xl-3">
+         <div class="card m-b-30">
+            <div class="card-body row">
+               <div class="col-10 card-title align-self-center mb-0">
+                  <h2>App: {{connector?.bridge?.appName}}<br>PMS: {{connector?.bridge?.pmsName}}</h2>
+                  <p>{{connector?.id}}</p>
+                  <p>Monitoring: {{connector?.monitoring}}</p>
+               </div>
             </div>
-
-            <div class="form-group">
-               <label for="personalToken">Personal Token</label>
-               <input type="password" ngModel="{{editConnector?.userPMage?.personalToken}}" name="personalToken" class="form-control" id="personalToken" placeholder="<Personal Token">
-           </div>
-
-           <div class="form-group">
-            <label for="originRepo">Origin</label>
-            <input type="text" ngModel="{{editConnector?.userPMage?.originRepo}}" name="originRepo" class="form-control" id="originRepo" placeholder="Origin Repositoy">
-         </div>
-
-              <div class="form-group">
-                 <label for="repoRemote">Project Remote Link</label>
-                 <input type="text" ngModel="{{editConnector?.userPMage?.repoRemote}}" name="repoRemote" class="form-control" id="repoRemote" name="repoRemote" placeholder="Project Remote Link">
-              </div>
-              <div class="form-group">
-               <label for="repoRemote">Project Local Directory</label>
-               <input type="text" ngModel="{{editConnector?.userPMage?.repoLocal}}" name="repoLocal" class="form-control" id="repoLocal" name="repoLocal" placeholder="Project Local Directory">
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item">
+                  <i class="fa float-right "></i><strong>PMS Username:</strong><br> {{connector?.bridge?.userNamePms}}<br>
+                  <i class="fa float-right"></i><strong>Process Id :</strong><br>
+                  {{connector?.bridge?.processId}}
+               </li>
+            </ul>
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item">
+                  <i class="fa float-right"></i><strong>App Username:</strong><br> {{connector?.bridge?.userNameApp}}<br>
+                  <i class="fa float-right"></i><strong>Project Link:</strong><br> 
+                  <p><a href={{connector?.bridge?.projectLink}} class="pe-auto" target="_blank">{{connector?.bridge?.projectLink}}</a></p>
+               </li>
+            </ul>
+            <div class="card-body">
+               <div class="float-right btn-group btn-group-sm">
+                  <a (click)="onOpenModal(connector, 'add_table')" class="btn btn-info tooltips" data-placement="top"
+                     data-original-title="Add Action linkage table"><i class="fa fa-table"></i></a>
+                  <a (click)="onOpenModal(connector, 'start_monitor')" class="btn btn-success tooltips" data-placement="top"
+                     data-original-title="Start monitoring"><i class="fa fa-play"></i></a>
+                  <a (click)="onOpenModal(connector, 'stop_monitor')" class="btn btn-danger tooltips" data-placement="top"
+                     data-original-title="Stop monitoring"><i class="fa fa-stop"></i></a>   
+                  <a (click)="onOpenModal(connector, 'edit')" class="btn btn-primary tooltips" data-placement="top"
+                     data-original-title="Edit"><i class="fa fa-pencil"></i> </a>
+                  <a (click)="onOpenModal(connector, 'delete')" class="btn btn-secondary tooltips" data-placement="top"
+                     data-original-title="Delete"><i class="fa fa-times"></i></a>
+               </div>
             </div>
-              
-              <div class="modal-footer">
-                 <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                 <button (click)="onUpdateConnector(editConnector.id, editForm.value)" data-dismiss="modal" class="btn btn-primary" >Save changes</button>
-              </div>
-           </form>
-        </div>
-     </div>
-  </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Add User Modal
+   <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h2 class="modal-title" id="addUserModalLabel">Add User</h2>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddUser(addForm)">
+                  <div class="form-group">
+                     <label for="name">Username</label>
+                     <input type="text" ngModel name="pMageUsername" class="form-control" id="username"
+                        placeholder="Username" required>
+                  </div>
+                  <div class="form-group">
+                     <label for="email">Email</label>
+                     <input type="text" ngModel name="pMageUsermail" class="form-control" id="emal"
+                        placeholder="Email" required>
+                  </div>
+                  <div class="modal-footer">
+                     <button type="button" id="add-user-form" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save user</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div> -->
+
+   <!-- Add Connector Modal -->
+   <div class="modal fade" id="addConnectorModal" tabindex="-1" role="dialog" aria-labelledby="addConnectorModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h1 class="modal-title" id="addConnectorModalLabel">Add Connector</h1>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addForm="ngForm" (ngSubmit)="onAddConnector(addForm)">
+                  <h2>PMS Connection Configuration</h2>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Username</mat-label>
+                     <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Password</mat-label>
+                     <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
+                        matInput placeholder="PMS Password" required>
+                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Name</mat-label>
+                     <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                        required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Project Id</mat-label>
+                     <input ngModel name="processId" id="processIdEdit"
+                        matInput placeholder="PMS Project ID">
+                  </mat-form-field>
+                  <h2>App Connection Configuration</h2>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application Username</mat-label>
+                     <input ngModel name="userNameApp" id="userNameAppEdit"
+                        matInput placeholder="App Username" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application password</mat-label>
+                     <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
+                        matInput placeholder="App Password" required>
+                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application name</mat-label>
+                     <input ngModel name="appName" id="appNameEdit"
+                        matInput placeholder="Appname" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Project Remote Link</mat-label>
+                     <input ngModel name="projectLink" id="projectLinkEdit"
+                        matInput placeholder="Project Remote Link">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Project Local Directory</mat-label>
+                     <input ngModel name="projectDir" id="projectDirEdit"
+                        matInput placeholder="Project Local Directory">
+                  </mat-form-field>
+                  <div class="modal-footer">
+                     <button type="button" id="add-connector-form" class="btn btn-secondary"
+                        data-dismiss="modal">Close</button>
+                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Add</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Edit Modal -->
+   <div class="modal fade" id="updateConnectorModal" tabindex="-1" role="dialog"
+      aria-labelledby="connectorEditModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h1 class="modal-title" id="updateConnectorModalLabel">Edit Connector
+                  {{editConnector?.id}}</h1>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #editForm="ngForm">
+                  <h2 for="heading">PMS Connection Configuration</h2>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Username</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.userNamePms}}" name="userNamePms" matInput placeholder="Ex. John" id="userNamePms" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Password</mat-label>
+                     <input type="password" ngModel="{{editConnector?.bridge?.passwordPms}}" name="passwordPms" id="passwordPms" [type]="hide ? 'password' : 'text'"
+                        matInput placeholder="PMS Password" required>
+                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Name</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.pmsName}}" name="pmsName" id="pmsName" matInput placeholder="PMS Name"
+                        required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>PMS Project Id</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.processId}}" name="processId" id="processId"
+                        matInput placeholder="PMS Project ID">
+                  </mat-form-field>
+                  <h2>App Connection Configuration</h2>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application Username</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.userNameApp}}" name="userNameApp" id="userNameApp"
+                        matInput placeholder="App Username" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application password</mat-label>
+                     <input type="password" ngModel="{{editConnector?.bridge?.passwordApp}}" name="passwordApp" id="passwordApp" [type]="hide ? 'password' : 'text'"
+                        matInput placeholder="App Password" required>
+                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Application name</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.appName}}" name="appName" id="appName"
+                        matInput placeholder="Appname" required>
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Project Remote Link</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.projectLink}}" name="projectLink" id="projectLink"
+                        matInput placeholder="Project Remote Link">
+                  </mat-form-field>
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Project Local Directory</mat-label>
+                     <input ngModel="{{editConnector?.bridge?.projectDir}}" name="projectDir" id="projectDir"
+                        matInput placeholder="Project Local Directory">
+                  </mat-form-field>
+
+                  <div class="modal-footer">
+                     <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
+                     <button (click)="onUpdateConnector(editConnector.id, editForm.value)" data-dismiss="modal"
+                        class="btn btn-primary">Save changes</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Delete Modal -->
+   <div class="modal fade" id="deleteConnectorModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h2 class="modal-title" id="deleteModelLabel">Delete Connector</h2>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to delete connector {{deleteConnector?.id}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onDeleteConnector(deleteConnector?.id)" class="btn btn-danger"
+                     data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Start monitoring Modal -->
+   <div class="modal fade" id="startMonitorConnectorModal" tabindex="-1" role="dialog" aria-labelledby="startMonitoringModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h2 class="modal-title" id="startMonitoringModelLabel">Start Monitoring</h2>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to start monitoring your activities between your applications and PMS via connector {{monitoringConnector?.id}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onStartMonitoring(monitoringConnector?.id)" class="btn btn-primary"
+                     data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Stop monitoring Modal -->
+   <div class="modal fade" id="stopMonitorConnectorModal" tabindex="-1" role="dialog" aria-labelledby="stopMonitoringModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h2 class="modal-title" id="stopMonitoringModelLabel">Stop Monitoring</h2>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <p>Are you sure you want to stop monitoring your activities between your applications and PMS via connector {{monitoringConnector?.id}}?</p>
+               <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                  <button (click)="onStopMonitoring(monitoringConnector?.id)" class="btn btn-primary"
+                     data-dismiss="modal">Yes</button>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   <!-- Add monitoring table Modal -->
+   <div class="modal fade" id="addTableModal" tabindex="-1" role="dialog" aria-labelledby="addTableModelLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <h2 class="modal-title" id="addTableModal">Create Action linkage table</h2>
+               <h3>Detail the interaction of event, action and corresponding task</h3>
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <form #addActionForm="ngForm"> 
+                  <mat-form-field class="example-full-width">
+                     <mat-label>Structure: event,action,action_detail,task</mat-label>
+                     <textarea matInput placeholder="Ex. save,commit-pushed,finish Init,Init" value={{editConnector?.actionEventDescription}} name="actionEventDescription" ngModel
+                     cdkTextareaAutosize
+                     #autosize="cdkTextareaAutosize"
+                     cdkAutosizeMinRows="1"
+                     cdkAutosizeMaxRows="5"></textarea>
+                   </mat-form-field>
+                   <div class="modal-footer">
+                     <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-action-table">Cancel</button>
+                     <button class="btn btn-primary" type="submit" (click)="onAddActionTable(editConnector.id, addActionForm.value.actionEventDescription)" data-dismiss="modal">Save</button>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+
+   
 </div>
 
-<!-- Delete Modal -->
-<div class="modal fade" id="deleteConnectorModal" tabindex="-1" role="dialog" aria-labelledby="deleteModelLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-     <div class="modal-content">
-        <div class="modal-header">
-           <h5 class="modal-title" id="deleteModelLabel">Delete Connector</h5>
-           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-           <span aria-hidden="true">&times;</span>
-           </button>
-        </div>
-        <div class="modal-body">
-           <p>Are you sure you want to delete connector {{deleteConnector?.id}}?</p>
-           <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
-              <button (click)="onDeleteEmployee(deleteConnector?.id)" class="btn btn-danger" data-dismiss="modal">Yes</button>
-           </div>
-        </div>
-     </div>
-  </div>
-</div>
-</div>
-
-<!-- Notification for no employees -->
+<!-- Notification for no connectors -->
 <div *ngIf="connectorList?.length == 0" class="col-lg-12 col-md-12 col-xl-12">
-<div class="alert alert-info" role="alert">
-  <h4 class="alert-heading">NO CONNECTORS!</h4>
-  <p>No Connectors were found.</p>
-</div>
+   <div class="alert alert-info" role="alert">
+      <h4 class="alert-heading">NO CONNECTORS!</h4>
+      <p>No connectors were found.</p>
+   </div>
 </div>

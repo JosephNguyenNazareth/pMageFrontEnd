@@ -1,14 +1,19 @@
 import { PmsConfig } from "./interface/pmsconfig";
 import { Retriever } from "./interface/retriever";
-import { UserPMage } from "./interface/userpmage";
+import { Bridge } from "./interface/bridge";
+import { ActionEvent } from "./interface/action.event";
+
 
 export interface Connector {
     id: string;
-    userPMage: UserPMage;
+    userEmail: string;
+    bridge: Bridge;
+    actionEventTable: ActionEvent[];
+    actionEventDescription: string;
     historyCommitList: string[];
     violatedCommitList: string[];
     monitoringLog: Map<string, string>;
-    isMonitoring: boolean;
+    monitoring: boolean;
     retriever: Retriever;
     pmsConfig: PmsConfig;
 }

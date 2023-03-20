@@ -3,7 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Connector } from './connector';
 import { ConnectorService } from './connector.service';
-import { UserPMage } from './interface/userpmage';
+import { Bridge } from './interface/bridge';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
@@ -14,6 +15,7 @@ export class AppComponent implements OnInit {
   public connectorList: Connector[] = [];
   public editConnector!: Connector;
   public deleteConnector!: Connector;
+  public monitoringConnector!: Connector;
 
   constructor(private connectorService: ConnectorService) { }
 
@@ -47,8 +49,22 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onUpdateConnector(connectorId: string, user: UserPMage): void {
-    this.connectorService.updateConnector(connectorId, user).subscribe(
+  public onAddActionTable(connectorId: string, actionEventDescription :string): void {
+    document.getElementById('add-action-table')?.click();
+    this.connectorService.addAction(connectorId, actionEventDescription).subscribe(
+      (response: void) => {
+        console.log(response);
+        this.getConnectors();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+  
+      }
+    );
+  }
+
+  public onUpdateConnector(connectorId: string, bridge: Bridge): void {
+    this.connectorService.updateConnector(connectorId, bridge).subscribe(
       (response: void) => {
         console.log(response);
         this.getConnectors();
@@ -59,7 +75,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onDeleteEmployee(connectorId?: string): void {
+  public onDeleteConnector(connectorId?: string): void {
     if (connectorId) {
       this.connectorService.deleteConnector(connectorId).subscribe(
         (response: void) => {
@@ -73,13 +89,43 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public onStartMonitoring(connectorId?: string): void {
+    if (connectorId) {
+      this.connectorService.startMonitoring(connectorId).subscribe(
+        (response: void) => {
+          console.log(response);
+          this.getConnectors();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+  }
+
+  public onStopMonitoring(connectorId?: string): void {
+    if (connectorId) {
+      this.connectorService.stopMonitoring(connectorId).subscribe(
+        (response: void) => {
+          console.log(response);
+          this.getConnectors();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+  }
+
+
   public searchConnectors(key: string): void {
     const results: Connector[] = [];
     for (const connector of this.connectorList) {
-      if (connector.userPMage.realName.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || connector.userPMage.pmsName.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || connector.userPMage.userName.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || connector.userPMage.originRepo.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+      if (connector.bridge.userNamePms.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.bridge.pmsName.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.bridge.appName.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.bridge.userNameApp.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.bridge.projectLink.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
         results.push(connector);
       }
     }
@@ -100,6 +146,21 @@ export class AppComponent implements OnInit {
     if (mode === 'add') {
       button.setAttribute('data-target', '#addConnectorModal');
     }
+    if (mode === 'start_monitor') {
+      if (connector) {
+        connector.monitoring = true;
+        this.monitoringConnector = connector;
+        // this.monitoringConnector.isMonitoring = true;
+      }
+      button.setAttribute('data-target', '#startMonitorConnectorModal');
+    }
+    if (mode === 'stop_monitor') {
+      if (connector) {
+        connector.monitoring = false;
+        this.monitoringConnector = connector;
+      }
+      button.setAttribute('data-target', '#stopMonitorConnectorModal');
+    }
     if (mode === 'edit') {
       if (connector)
         this.editConnector = connector;
@@ -110,7 +171,18 @@ export class AppComponent implements OnInit {
         this.deleteConnector = connector;
       button.setAttribute('data-target', '#deleteConnectorModal');
     }
+    if (mode === 'add_table') {
+      if (connector)
+        this.editConnector = connector;
+      button.setAttribute('data-target', '#addTableModal');
+    }
     container?.appendChild(button);
     button.click();
   }
+
+  enterPass: FormGroup = new FormGroup({
+    email: new FormControl('', [Validators.email, Validators.required ]),
+    password: new FormControl('', [Validators.required, Validators.min(3) ])
+  });
+  hide = true;
 }  

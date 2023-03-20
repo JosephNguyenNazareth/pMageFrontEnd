@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpParams } from '@angular/common/http'
 import { Connector } from './connector';
 import { environment } from 'src/environments/environment';
-import { UserPMage } from './interface/userpmage';
+import { Bridge } from './interface/bridge';
 
 @Injectable({providedIn: 'root'})
 export class ConnectorService {
@@ -15,15 +15,27 @@ export class ConnectorService {
         return this.http.get<Connector[]>(`${this.apiServerUrl}/api/pmage`);
     }
 
-    public addConnector(user: UserPMage): Observable<string> {
-        return this.http.post<string>(`${this.apiServerUrl}/api/pmage/add`, user);
+    public addConnector(bridge : Bridge): Observable<string> {
+        return this.http.post(`${this.apiServerUrl}/api/pmage/add`, bridge, {responseType: 'text'});
     }
 
-    public updateConnector(connectorId: string, user : UserPMage): Observable<void> {
-        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update/${connectorId}`, user);
+    public updateConnector(connectorId: string, bridge : Bridge): Observable<void> {
+        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update/${connectorId}`, bridge);
     }
 
     public deleteConnector(connectorId: string): Observable<void> {
         return this.http.delete<void>(`${this.apiServerUrl}/api/pmage/delete/${connectorId}`);
+    }
+
+    public startMonitoring(connectorId: string): Observable<void> {
+        return this.http.get<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/monitor`);
+    }
+
+    public stopMonitoring(connectorId: string): Observable<void> {
+        return this.http.get<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/end-monitor`);
+    }
+
+    public addAction(connectorId: string, actionDesc: string): Observable<void> {
+        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/add-table`, {}, { params: {actionDescription: actionDesc} });
     }
 }

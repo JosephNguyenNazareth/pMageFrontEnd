@@ -37,7 +37,7 @@
             <ul class="list-group list-group-flush">
                <li class="list-group-item">
                   <i class="fa float-right "></i><strong>PMS Username:</strong><br> {{connector?.bridge?.userNamePms}}<br>
-                  <i class="fa float-right"></i><strong>Process Id :</strong><br>
+                  <i class="fa float-right"></i><strong>Process Instance Id :</strong><br>
                   {{connector?.bridge?.processId}}
                </li>
             </ul>
@@ -130,9 +130,9 @@
                         required>
                   </mat-form-field>
                   <mat-form-field class="example-full-width">
-                     <mat-label>PMS Project Id</mat-label>
+                     <mat-label>PMS Process Instance Id</mat-label>
                      <input ngModel name="processId" id="processIdEdit"
-                        matInput placeholder="PMS Project ID">
+                        matInput placeholder="PMS Process Instance ID">
                   </mat-form-field>
                   <h2>App Connection Configuration</h2>
                   <mat-form-field class="example-full-width">

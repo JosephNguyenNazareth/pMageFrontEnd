@@ -356,12 +356,13 @@
                <form #addActionForm="ngForm"> 
                   <mat-form-field class="example-full-width">
                      <mat-label>Structure: action, action_detail, event, task</mat-label>
-                     <textarea matInput placeholder="Ex. save,commit-pushed,finish Init,Init" value={{editConnector?.actionEventDescription}} name="actionEventDescription" ngModel
+                     <textarea matInput placeholder="Ex. push-commit, finish Init, endTask, Init" value={{editConnector?.actionEventDescription}} name="actionEventDescription" ngModel
                      cdkTextareaAutosize
                      #autosize="cdkTextareaAutosize"
                      cdkAutosizeMinRows="1"
                      cdkAutosizeMaxRows="10"></textarea>
                    </mat-form-field>
+                   {{addActionForm.value.actionEventDescription}}
                    <div class="modal-footer">
                      <button type="button" class="btn btn-secondary" data-dismiss="modal" id="add-action-table">Cancel</button>
                      <button class="btn btn-primary" type="submit" (click)="onAddActionTable(editConnector.id, addActionForm.value.actionEventDescription)" data-dismiss="modal">Save</button>

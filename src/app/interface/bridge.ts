@@ -4,7 +4,8 @@ export interface Bridge {
     passwordApp : string;
     projectLink : string;
     projectDir: string;
-    pmsName : string;
+    pmsName: string;
+    pmsUrl: string;
     userNamePms : string;
     passwordPms : string;
     processId : string;

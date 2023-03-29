@@ -14,10 +14,10 @@ RUN npm install
 COPY . .
 
 # Build the Angular app for production
-RUN npm run build --prod pmageFront
+RUN npm run build --prod pmage_front
 
 # Use NGINX as the web server
 FROM nginx:alpine
 
 # Copy the built app from the previous stage to the NGINX HTML directory
-COPY --from=0 /app/dist/pmageFront /usr/share/nginx/html
+COPY --from=0 /app/dist/pmage_front /usr/share/nginx/html

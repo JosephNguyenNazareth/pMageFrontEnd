@@ -64,46 +64,12 @@
             </div>
          </div>
       </div>
-   </div>
-
-   <!-- Add User Modal
-   <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
-      aria-hidden="true">
-      <div class="modal-dialog" role="document">
-         <div class="modal-content">
-            <div class="modal-header">
-               <h2 class="modal-title" id="addUserModalLabel">Add User</h2>
-               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-               </button>
-            </div>
-            <div class="modal-body">
-               <form #addForm="ngForm" (ngSubmit)="onAddUser(addForm)">
-                  <div class="form-group">
-                     <label for="name">Username</label>
-                     <input type="text" ngModel name="pMageUsername" class="form-control" id="username"
-                        placeholder="Username" required>
-                  </div>
-                  <div class="form-group">
-                     <label for="email">Email</label>
-                     <input type="text" ngModel name="pMageUsermail" class="form-control" id="emal"
-                        placeholder="Email" required>
-                  </div>
-                  <div class="modal-footer">
-                     <button type="button" id="add-user-form" class="btn btn-secondary"
-                        data-dismiss="modal">Close</button>
-                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Save user</button>
-                  </div>
-               </form>
-            </div>
-         </div>
-      </div>
-   </div> -->
+   </div>   
 
    <!-- Add Connector Modal -->
-   <div class="modal fade" id="addConnectorModal" tabindex="-1" role="dialog" aria-labelledby="addConnectorModalLabel"
+   <div class="modal fade bd-example-modal-lg" id="addConnectorModal" tabindex="-1" role="dialog" aria-labelledby="addConnectorModalLabel"
       aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
             <div class="modal-header">
                <h1 class="modal-title" id="addConnectorModalLabel">Add Connector</h1>
@@ -114,64 +80,95 @@
             <div class="modal-body">
                <form #addForm="ngForm" (ngSubmit)="onAddConnector(addForm)">
                   <h2>PMS</h2>
-                  <h3>System Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Name</mat-label>
-                     <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
-                        required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Url</mat-label>
-                     <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
-                        required>
-                  </mat-form-field>
-                  <h3>Process Instance Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Process Instance Id</mat-label>
-                     <input ngModel name="processId" id="processIdEdit"
-                        matInput placeholder="PMS Process Instance ID">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Username</mat-label>
-                     <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Password</mat-label>
-                     <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
-                        matInput placeholder="PMS Password" required>
-                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </mat-form-field>
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Name</mat-label>
+                           <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                              required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Url</mat-label>
+                           <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
+                              required>
+                        </mat-form-field>
+                     </div>
+                  </div>
+                  
+                  
+                  <div class="mb-3">
+                     <mat-form-field class="example-full-width">
+                        <mat-label>PMS Process Instance Id</mat-label>
+                        <input ngModel name="processId" id="processIdEdit"
+                           matInput placeholder="PMS Process Instance ID">
+                     </mat-form-field>
+                  </div>
+                  
 
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Username</mat-label>
+                           <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Password</mat-label>
+                           <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
+                              matInput placeholder="PMS Password" required>
+                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </mat-form-field>
+                     </div>
+                  </div>
+                  
+                  
                   
                   <h2>Application</h2>
-                  <h3>System Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application name</mat-label>
-                     <input ngModel name="appName" id="appNameEdit"
-                        matInput placeholder="Appname" required>
-                  </mat-form-field>
-                  <h3>Project Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Project Remote Link</mat-label>
-                     <input ngModel name="projectLink" id="projectLinkEdit"
-                        matInput placeholder="Project Remote Link">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Project Local Directory</mat-label>
-                     <input ngModel name="projectDir" id="projectDirEdit"
-                        matInput placeholder="Project Local Directory">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application Username</mat-label>
-                     <input ngModel name="userNameApp" id="userNameAppEdit"
-                        matInput placeholder="App Username" required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application password</mat-label>
-                     <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
-                        matInput placeholder="App Password" required>
-                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </mat-form-field>
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application name</mat-label>
+                           <input ngModel name="appName" id="appNameEdit"
+                              matInput placeholder="Appname" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Project Remote Link</mat-label>
+                           <input ngModel name="projectLink" id="projectLinkEdit"
+                              matInput placeholder="Project Remote Link">
+                        </mat-form-field>
+                     </div>
+                  </div>
+
+                  <div class="mb-3">
+                     <mat-form-field class="example-full-width">
+                        <mat-label>Project Local Directory</mat-label>
+                        <input ngModel name="projectDir" id="projectDirEdit"
+                           matInput placeholder="Project Local Directory">
+                     </mat-form-field>
+                  </div>
+
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application Username</mat-label>
+                           <input ngModel name="userNameApp" id="userNameAppEdit"
+                              matInput placeholder="App Username" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application password</mat-label>
+                           <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
+                              matInput placeholder="App Password" required>
+                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </mat-form-field>
+                     </div>
+                  </div>
                   
                   <div class="modal-footer">
                      <button type="button" id="add-connector-form" class="btn btn-secondary"
@@ -185,9 +182,9 @@
    </div>
 
    <!-- Edit Modal -->
-   <div class="modal fade" id="updateConnectorModal" tabindex="-1" role="dialog"
+   <div class="modal fade bd-example-modal-lg" id="updateConnectorModal" tabindex="-1" role="dialog"
       aria-labelledby="connectorEditModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
             <div class="modal-header">
                <h1 class="modal-title" id="updateConnectorModalLabel">Edit Connector
@@ -198,67 +195,97 @@
             </div>
             <div class="modal-body">
                <form #editForm="ngForm">
-                  <h2 for="heading">PMS</h2>
-                  <h3>System Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Name</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.pmsName}}" name="pmsName" id="pmsName" matInput placeholder="PMS Url"
-                        required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Url</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.pmsUrl}}" name="pmsUrl" id="pmsUrl" matInput placeholder="PMS Name"
-                        required>
-                  </mat-form-field>
-      
-                  <h3>Process Instance Configuration</h3>            
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Process Instance Id</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.processId}}" name="processId" id="processId"
-                        matInput placeholder="PMS Process Instance ID">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Username</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.userNamePms}}" name="userNamePms" matInput placeholder="Ex. John" id="userNamePms" required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>PMS Password</mat-label>
-                     <input type="password" ngModel="{{editConnector?.bridge?.passwordPms}}" name="passwordPms" id="passwordPms" [type]="hide ? 'password' : 'text'"
-                        matInput placeholder="PMS Password" required>
-                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </mat-form-field>
+                  <h2>PMS</h2>
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Name</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.pmsName}}" name="pmsName" id="pmsName" matInput placeholder="PMS Url"
+                              required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Url</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.pmsUrl}}" name="pmsUrl" id="pmsUrl" matInput placeholder="PMS Name"
+                              required>
+                        </mat-form-field>
+                     </div>
+                  </div>
+                  
+                  
+                  <div class="mb-3">
+                     <mat-form-field class="example-full-width">
+                        <mat-label>PMS Process Instance Id</mat-label>
+                        <input ngModel="{{editConnector?.bridge?.processId}}" name="processId" id="processId"
+                           matInput placeholder="PMS Process Instance ID">
+                     </mat-form-field>
+                  </div>
+                  
+
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Username</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.userNamePms}}" name="userNamePms" matInput placeholder="Ex. John" id="userNamePms" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>PMS Password</mat-label>
+                           <input type="password" ngModel="{{editConnector?.bridge?.passwordPms}}" name="passwordPms" id="passwordPms" [type]="hide ? 'password' : 'text'"
+                              matInput placeholder="PMS Password" required>
+                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </mat-form-field>
+                     </div>
+                  </div>
                   
                   
                   <h2>App Connection Configuration</h2>
-                  <h3>System Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application name</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.appName}}" name="appName" id="appName"
-                        matInput placeholder="Appname" required>
-                  </mat-form-field>
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-4">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application name</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.appName}}" name="appName" id="appName"
+                              matInput placeholder="Appname" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-8">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Project Remote Link</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.projectLink}}" name="projectLink" id="projectLink"
+                              matInput placeholder="Project Remote Link">
+                        </mat-form-field>
+                     </div>
+                  </div>
                   
-                  <h3>Project Configuration</h3>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Project Remote Link</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.projectLink}}" name="projectLink" id="projectLink"
-                        matInput placeholder="Project Remote Link">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Project Local Directory</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.projectDir}}" name="projectDir" id="projectDir"
-                        matInput placeholder="Project Local Directory">
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application Username</mat-label>
-                     <input ngModel="{{editConnector?.bridge?.userNameApp}}" name="userNameApp" id="userNameApp"
-                        matInput placeholder="App Username" required>
-                  </mat-form-field>
-                  <mat-form-field class="example-full-width">
-                     <mat-label>Application password</mat-label>
-                     <input type="password" ngModel="{{editConnector?.bridge?.passwordApp}}" name="passwordApp" id="passwordApp" [type]="hide ? 'password' : 'text'"
-                        matInput placeholder="App Password" required>
-                     <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                  </mat-form-field>
+                  
+                  <div class="mb-3">
+                     <mat-form-field class="example-full-width">
+                        <mat-label>Project Local Directory</mat-label>
+                        <input ngModel="{{editConnector?.bridge?.projectDir}}" name="projectDir" id="projectDir"
+                           matInput placeholder="Project Local Directory">
+                     </mat-form-field>
+                  </div>
+                  
+
+                  <div class="row gx-3 mb-3">
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application Username</mat-label>
+                           <input ngModel="{{editConnector?.bridge?.userNameApp}}" name="userNameApp" id="userNameApp"
+                              matInput placeholder="App Username" required>
+                        </mat-form-field>
+                     </div>
+                     <div class="col-md-6">
+                        <mat-form-field class="example-full-width">
+                           <mat-label>Application password</mat-label>
+                           <input type="password" ngModel="{{editConnector?.bridge?.passwordApp}}" name="passwordApp" id="passwordApp" [type]="hide ? 'password' : 'text'"
+                              matInput placeholder="App Password" required>
+                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </mat-form-field>
+                     </div>
+                  </div>
 
                   <div class="modal-footer">
                      <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>

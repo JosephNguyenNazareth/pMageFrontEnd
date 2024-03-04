@@ -50,6 +50,23 @@ export class AppComponent implements OnInit {
     );
   }
 
+  public onGenerateActionTable(connectorId: string): void {
+    this.connectorService.generateActionLinkage(connectorId).subscribe(
+      (response: string) => {
+        const textarea: HTMLTextAreaElement = document.getElementById('actionEventDescription') as HTMLTextAreaElement;
+        textarea.value = response;
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public onCancelSavingActionTable(originalActionEventDescription: string): void {
+      const textarea: HTMLTextAreaElement = document.getElementById('actionEventDescription') as HTMLTextAreaElement;
+      textarea.value = originalActionEventDescription;
+  }
+
   public onAddActionTable(connectorId: string, actionEventDescription :string): void {
     document.getElementById('add-action-table')?.click();
     this.connectorService.addAction(connectorId, actionEventDescription).subscribe(

@@ -27,6 +27,10 @@ export class ConnectorService {
         return this.http.delete<void>(`${this.apiServerUrl}/api/pmage/delete/${connectorId}`);
     }
 
+    public generateActionLinkage(connectorId: string): Observable<string> {
+        return this.http.get(`${this.apiServerUrl}/api/pmage/${connectorId}/generate-table`, {responseType: 'text'});
+    }
+
     public startMonitoring(connectorId: string): Observable<void> {
         return this.http.get<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/monitor`);
     }

@@ -16,6 +16,7 @@ export class AppComponent implements OnInit {
   public editConnector!: Connector;
   public deleteConnector!: Connector;
   public monitoringConnector!: Connector;
+  public historyConnector!: Connector;
 
   constructor(private connectorService: ConnectorService) { }
 
@@ -148,18 +149,19 @@ export class AppComponent implements OnInit {
     }
     if (mode === 'start_monitor') {
       if (connector) {
-        connector.monitoring = true;
-        this.monitoringConnector = connector;
-        // this.monitoringConnector.isMonitoring = true;
+      //   connector.monitoring = true;
+        this.monitoringConnector = connector;        
       }
-      button.setAttribute('data-target', '#startMonitorConnectorModal');
+      if (!connector?.monitoring)
+        button.setAttribute('data-target', '#startMonitorConnectorModal');
     }
     if (mode === 'stop_monitor') {
       if (connector) {
-        connector.monitoring = false;
+      //   connector.monitoring = false;
         this.monitoringConnector = connector;
       }
-      button.setAttribute('data-target', '#stopMonitorConnectorModal');
+      if (connector?.monitoring)
+        button.setAttribute('data-target', '#stopMonitorConnectorModal');
     }
     if (mode === 'edit') {
       if (connector)
@@ -175,6 +177,11 @@ export class AppComponent implements OnInit {
       if (connector)
         this.editConnector = connector;
       button.setAttribute('data-target', '#addTableModal');
+    }
+    if (mode === 'history') {
+      if (connector)
+        this.historyConnector = connector;
+      button.setAttribute('data-target', '#historyConnectorModal');
     }
     container?.appendChild(button);
     button.click();

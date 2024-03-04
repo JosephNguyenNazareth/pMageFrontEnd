@@ -11,7 +11,6 @@ export interface Connector {
     actionEventTable: ActionEvent[];
     actionEventDescription: string;
     historyCommitList: string[];
-    violatedCommitList: string[];
     monitoringLog: Map<string, string>;
     monitoring: boolean;
     retriever: Retriever;

@@ -15,7 +15,7 @@ When accessing `background` directory, there are 4 files in this folder
 - `pms_config.json` : the file containing the configuration of process management systems in end-user workspace
 
 
-To run the backend service for pmage, at project's root directory
+To run the backend service for pmage, at project's background directory
 ``` bash
 java -jar pmage-v2.jar --spring.config.name=application
 ```

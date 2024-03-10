@@ -42,4 +42,8 @@ export class ConnectorService {
     public addAction(connectorId: string, actionDesc: string): Observable<void> {
         return this.http.put<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/add-table`, {}, { params: {actionDescription: actionDesc} });
     }
+
+    public getConnectorHistory(connectorId: string): Observable<void> {
+        return this.http.get<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/history`);
+    }
 }

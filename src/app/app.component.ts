@@ -135,6 +135,18 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public getConnectorHistory(connectorId: string): void {
+    this.connectorService.getConnectorHistory(connectorId).subscribe(
+      (response: void) => {
+        console.log(response);
+        this.getConnectors();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
 
   public searchConnectors(key: string): void {
     const results: Connector[] = [];
@@ -199,6 +211,7 @@ export class AppComponent implements OnInit {
       if (connector)
         this.historyConnector = connector;
       button.setAttribute('data-target', '#historyConnectorModal');
+      this.getConnectorHistory(this.historyConnector.id);
     }
     container?.appendChild(button);
     button.click();

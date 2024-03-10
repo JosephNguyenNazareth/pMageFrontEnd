@@ -192,7 +192,7 @@
                <h1 class="modal-title" id="updateConnectorModalLabel">Edit Connector
                   {{editConnector?.id}}</h1>
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
+                  <span aria-hidden="true">&timestr.substring(0,5)s;</span>
                </button>
             </div>
             <div class="modal-body">
@@ -370,9 +370,9 @@
    </div>
 
    <!-- History Modal -->
-   <div class="modal fade" id="historyConnectorModal" tabindex="-1" role="dialog" aria-labelledby="historyModelLabel"
+   <div class="modal fade bd-example-modal-lg" id="historyConnectorModal" tabindex="-1" role="dialog" aria-labelledby="historyModelLabel"
       aria-hidden="true">
-      <div class="modal-dialog" role="document">
+      <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
             <div class="modal-header">
                <h2 class="modal-title" id="historyModal">History Connector table</h2>
@@ -393,11 +393,11 @@
                   </thead>
                   <tbody>
                      <tr *ngFor="let row of historyConnector?.historyCommitList">
-                        <td>{{row}}</td>
-                        <td>{{row}}</td>
-                        <td>{{row}}</td>
-                        <td>{{row}}</td>
-                        <td>{{row}}</td>
+                        <td>{{row.commitId}}</td>
+                        <td>{{row.commitTime}}</td>
+                        <td>{{row.taskFound}}</td>
+                        <td>{{row.monitoringMessage}}</td>
+                        <td>{{row.isViolated}}</td>
                       </tr>
                   </tbody>
                 </table>

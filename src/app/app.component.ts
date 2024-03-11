@@ -5,6 +5,7 @@ import { Connector } from './connector';
 import { ConnectorService } from './connector.service';
 import { Bridge } from './interface/bridge';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Alignment } from './interface/alignment';
 
 @Component({
   selector: 'app-root',
@@ -166,6 +167,16 @@ export class AppComponent implements OnInit {
     }
   }
 
+
+  public onOpenDynamicModal(history: Alignment, connector: Connector): void {
+    if (history.monitoringMessage.includes("Task unknown")) {
+      this.onOpenModal(connector, "add_table");
+    } else if (history.monitoringMessage.includes("not found")) {
+      this.onOpenModal(connector, "discuss");
+    }
+  }
+
+
   public onOpenModal(connector: Connector | null, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -212,6 +223,9 @@ export class AppComponent implements OnInit {
         this.historyConnector = connector;
       button.setAttribute('data-target', '#historyConnectorModal');
       this.getConnectorHistory(this.historyConnector.id);
+    }
+    if (mode === "discuss") {
+      button.setAttribute('data-target', '#discussModal');
     }
     container?.appendChild(button);
     button.click();

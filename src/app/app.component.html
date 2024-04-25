@@ -17,6 +17,12 @@
                   class="sr-only">(current)</span></a>
          </li>
       </ul>
+      <ul class="navbar-nav mr-auto">
+         <li class="nav-item active">
+            <a class="nav-link" (click)="onOpenModal(null, 'add-config')">Update Configuration<span
+                  class="sr-only">(current)</span></a>
+         </li>
+      </ul>
       <form class="form-inline my-2 my-lg-0">
          <input type="search" (ngModelChange)="searchConnectors(key.value)" #key="ngModel" ngModel name="key"
             id="searchName" class="form-control mr-sm-2" placeholder="Search connectors..." required>
@@ -34,6 +40,11 @@
                   <p>Monitoring: {{connector?.monitoring}}</p>
                </div>
             </div>
+            <ul class="list-group list-group-flush">
+               <li class="list-group-item">
+                  <i class="fa float-right "></i><strong>pMage Username:</strong><br> {{connector?.userName}}<br>
+               </li>
+            </ul>
             <ul class="list-group list-group-flush">
                <li class="list-group-item">
                   <i class="fa float-right "></i><strong>PMS Username:</strong><br> {{connector?.bridge?.userNamePms}}<br>
@@ -74,110 +85,320 @@
       <div class="modal-dialog modal-lg" role="document">
          <div class="modal-content">
             <div class="modal-header">
-               <h1 class="modal-title" id="addConnectorModalLabel">Add Connector</h1>
+               <!-- <h1 class="modal-title" id="addConnectorModalLabel">Add Connector</h1> -->
                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                </button>
             </div>
             <div class="modal-body">
-               <form #addForm="ngForm" (ngSubmit)="onAddConnector(addForm)">
-                  <h2>PMS</h2>
-                  <div class="row gx-3 mb-3">
-                     <div class="col-md-4">
+               <mat-tab-group animationDuration="0ms">
+                  <mat-tab label="New connector">
+                     <form #addForm="ngForm" (ngSubmit)="onAddConnector(addForm)">
                         <mat-form-field class="example-full-width">
-                           <mat-label>PMS Name</mat-label>
-                           <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                           <mat-label>Username</mat-label>
+                           <input ngModel name="userName" id="userName" matInput placeholder="pMage username"
                               required>
                         </mat-form-field>
-                     </div>
-                     <div class="col-md-8">
+                        <h2>PMS</h2>
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-4">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Name</mat-label>
+                                 <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                                    required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Url</mat-label>
+                                 <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
+                                    required>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        
+                        <div class="mb-3">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>PMS Process Instance Id</mat-label>
+                              <input ngModel name="processId" id="processIdEdit"
+                                 matInput placeholder="PMS Process Instance ID">
+                           </mat-form-field>
+                        </div>
+                        
+   
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Username</mat-label>
+                                 <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Password</mat-label>
+                                 <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
+                                    matInput placeholder="PMS Password" required>
+                                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        
+                        
+                        <h2>Application</h2>
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-4">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application name</mat-label>
+                                 <input ngModel name="appName" id="appNameEdit"
+                                    matInput placeholder="Appname" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Project Remote Link</mat-label>
+                                 <input ngModel name="projectLink" id="projectLinkEdit"
+                                    matInput placeholder="Project Remote Link">
+                              </mat-form-field>
+                           </div>
+                        </div>
+   
+                        <div class="mb-3">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>Project Local Directory</mat-label>
+                              <input ngModel name="projectDir" id="projectDirEdit"
+                                 matInput placeholder="Project Local Directory">
+                           </mat-form-field>
+                        </div>
+   
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application Username</mat-label>
+                                 <input ngModel name="userNameApp" id="userNameAppEdit"
+                                    matInput placeholder="App Username" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application password</mat-label>
+                                 <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
+                                    matInput placeholder="App Password" required>
+                                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        <div class="modal-footer">
+                           <button type="button" id="add-supp-connector-form" class="btn btn-secondary"
+                              data-dismiss="modal">Close</button>
+                           <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary" data-dismiss="modal">Add</button>
+                        </div>
+                     </form>
+                  </mat-tab>
+                  <mat-tab label="Supplementary connector">
+                     <form #addSuppForm="ngForm" (ngSubmit)="onAddSuppConnector(addSuppForm)">
                         <mat-form-field class="example-full-width">
-                           <mat-label>PMS Url</mat-label>
-                           <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
+                           <mat-label>Username</mat-label>
+                           <input ngModel name="userName" id="userName" matInput placeholder="pMage username"
                               required>
                         </mat-form-field>
-                     </div>
-                  </div>
-                  
-                  
-                  <div class="mb-3">
-                     <mat-form-field class="example-full-width">
-                        <mat-label>PMS Process Instance Id</mat-label>
-                        <input ngModel name="processId" id="processIdEdit"
-                           matInput placeholder="PMS Process Instance ID">
-                     </mat-form-field>
-                  </div>
-                  
+                        <h2>PMS</h2>
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-4">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Name</mat-label>
+                                 <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                                    required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Url</mat-label>
+                                 <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
+                                    required>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        
+                        <div class="mb-3">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>PMS Process Instance Id</mat-label>
+                              <input ngModel name="processId" id="processIdEdit"
+                                 matInput placeholder="PMS Process Instance ID">
+                           </mat-form-field>
+                        </div>
+                        
+   
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Username</mat-label>
+                                 <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Password</mat-label>
+                                 <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
+                                    matInput placeholder="PMS Password" required>
+                                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                     
+                        <h2>Application</h2>
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-4">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application name</mat-label>
+                                 <input ngModel name="appName" id="appNameEdit"
+                                    matInput placeholder="Appname" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Project Remote Link</mat-label>
+                                 <input ngModel name="projectLink" id="projectLinkEdit"
+                                    matInput placeholder="Project Remote Link">
+                              </mat-form-field>
+                           </div>
+                        </div>
+   
+                        <div class="mb-3">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>Project Local Directory</mat-label>
+                              <input ngModel name="projectDir" id="projectDirEdit"
+                                 matInput placeholder="Project Local Directory">
+                           </mat-form-field>
+                        </div>
+   
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application Username</mat-label>
+                                 <input ngModel name="userNameApp" id="userNameAppEdit"
+                                    matInput placeholder="App Username" required>
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>Application password</mat-label>
+                                 <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
+                                    matInput placeholder="App Password" required>
+                                 <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                              </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        <h2>Supplementary Application</h2>
 
-                  <div class="row gx-3 mb-3">
-                     <div class="col-md-6">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>PMS Username</mat-label>
-                           <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
-                        </mat-form-field>
-                     </div>
-                     <div class="col-md-6">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>PMS Password</mat-label>
-                           <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
-                              matInput placeholder="PMS Password" required>
-                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </mat-form-field>
-                     </div>
-                  </div>
-                  
-                  
-                  
-                  <h2>Application</h2>
-                  <div class="row gx-3 mb-3">
-                     <div class="col-md-4">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>Application name</mat-label>
-                           <input ngModel name="appName" id="appNameEdit"
-                              matInput placeholder="Appname" required>
-                        </mat-form-field>
-                     </div>
-                     <div class="col-md-8">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>Project Remote Link</mat-label>
-                           <input ngModel name="projectLink" id="projectLinkEdit"
-                              matInput placeholder="Project Remote Link">
-                        </mat-form-field>
-                     </div>
-                  </div>
+                        <mat-radio-group aria-labelledby="base-connector" class="base-connector-radio-group" name="base-connector" [(ngModel)]="baseConnectorId">
+                           <mat-radio-button class="base-connector-radio-button" *ngFor="let connector of connectorList" [value]="connector.id">
+                              Base connecter ID: <strong>{{connector.id}}</strong><br>
+                              Application: <strong>{{connector.bridge.appName}}</strong><br>
+                              Project link: <strong>{{connector.bridge.projectLink}}</strong>
+                           </mat-radio-button>
+                        </mat-radio-group>
 
-                  <div class="mb-3">
-                     <mat-form-field class="example-full-width">
-                        <mat-label>Project Local Directory</mat-label>
-                        <input ngModel name="projectDir" id="projectDirEdit"
-                           matInput placeholder="Project Local Directory">
-                     </mat-form-field>
-                  </div>
+                        <div class="modal-footer">
+                           <button type="button" id="add-connector-form" class="btn btn-secondary"
+                              data-dismiss="modal">Close</button>
+                           <button [disabled]="addSuppForm.invalid" type="submit" class="btn btn-primary">Add</button>
+                        </div>
+                     </form>
+                  </mat-tab>
+               </mat-tab-group>
+            </div>
+         </div>
+      </div>
+   </div>
 
-                  <div class="row gx-3 mb-3">
-                     <div class="col-md-6">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>Application Username</mat-label>
-                           <input ngModel name="userNameApp" id="userNameAppEdit"
-                              matInput placeholder="App Username" required>
-                        </mat-form-field>
-                     </div>
-                     <div class="col-md-6">
-                        <mat-form-field class="example-full-width">
-                           <mat-label>Application password</mat-label>
-                           <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
-                              matInput placeholder="App Password" required>
-                           <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                        </mat-form-field>
-                     </div>
-                  </div>
-                  
-                  <div class="modal-footer">
-                     <button type="button" id="add-connector-form" class="btn btn-secondary"
-                        data-dismiss="modal">Close</button>
-                     <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Add</button>
-                  </div>
-               </form>
+   <!-- Add Configuration Modal -->
+   <div class="modal fade bd-example-modal-lg" id="addConfigModal" tabindex="-1" role="dialog" aria-labelledby="addPMSModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+         <div class="modal-content">
+            <div class="modal-header">
+               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+               </button>
+            </div>
+            <div class="modal-body">
+               <mat-tab-group animationDuration="0ms">
+                  <mat-tab label="Update PMS configuration">
+                     <form #pmsForm="ngForm" (ngSubmit)="onUpdatePMSConfig(pmsForm)">
+                        <h3>Functions</h3>
+                        <div class="row gx-3 mb-3">
+                           <div class="col md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Name</mat-label>
+                                 <input ngModel name="pmsName" id="pmsName"
+                                    matInput placeholder="PMS Name">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-6">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS URL</mat-label>
+                                 <input ngModel name="pmsUrl" id="pmsURL" matInput placeholder="URL PMS">
+                              </mat-form-field>
+                           </div>
+                        </div>
+
+                        <div class="mb-3" *ngFor="let func of pmsFunctions">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>{{func}}</mat-label>
+                              <input ngModel name="{{func}}_url" id="{{func}}_url"
+                                 matInput placeholder="URL">
+                           </mat-form-field>
+                           <div class="row gx-3 mb-3">
+                              <div class="col md-4">
+                                 <mat-form-field class="example-full-width">
+                                    <mat-label>Parameters</mat-label>
+                                    <input ngModel name="{{func}}_param" id="{{func}}_param"
+                                       matInput placeholder="URL Parameters">
+                                 </mat-form-field>
+                              </div>
+                              <div class="col-md-8">
+                                 <mat-form-field class="example-full-width">
+                                    <mat-label>Body</mat-label>
+                                    <textarea ngModel name="{{func}}_body" id="{{func}}_body" matInput placeholder="URL Body"></textarea>
+                                 </mat-form-field>
+                              </div>
+                           </div>
+                        </div>
+                        <p>{{updatePMSConfigurationResponse}}</p>
+                        
+                        <div class="modal-footer">
+                           <button type="button" id="add-pms-config-form" class="btn btn-secondary"
+                              data-dismiss="modal">Close</button>
+                           <button [disabled]="pmsForm.invalid" type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                     </form>
+                  </mat-tab>
+                  <mat-tab label="Update Application Configuration">
+                     <form #appForm="ngForm" (ngSubmit)="onUpdateAppConfig(appForm)">
+                        <h3>Information Location</h3>
+                        
+                        <div class="mb-3" *ngFor="let info of appMessageInfo">
+                           <mat-form-field class="example-full-width">
+                              <mat-label>{{info}}</mat-label>
+                              <input ngModel name="info" id="{{info}} location"
+                                 matInput placeholder="{{info}} location, classpath, etc.">
+                           </mat-form-field>
+                        </div>
+                        
+                        
+                        <div class="modal-footer">
+                           <button type="button" id="add-app-config-form" class="btn btn-secondary"
+                              data-dismiss="modal">Close</button>
+                           <button [disabled]="appForm.invalid" type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                     </form>
+               </mat-tab>
+               </mat-tab-group>
             </div>
          </div>
       </div>
@@ -197,6 +418,7 @@
             </div>
             <div class="modal-body">
                <form #editForm="ngForm">
+                  <h2>Username: {{editConnector?.userName}}</h2>
                   <h2>PMS</h2>
                   <div class="row gx-3 mb-3">
                      <div class="col-md-4">
@@ -288,6 +510,19 @@
                         </mat-form-field>
                      </div>
                   </div>
+
+                  <div *ngIf="editConnector?.suppProjectLink != undefined">
+                     <h2>Supplementary Application</h2>
+
+                     <mat-radio-group aria-labelledby="base-connector" class="base-connector-radio-group" name="base-connector" [(ngModel)]="baseConnectorId" >
+                        <mat-radio-button class="base-connector-radio-button" *ngFor="let connector of connectorList" [value]="connector.id">
+                           Base connecter ID: <strong>{{connector.id}}</strong><br>
+                           Application: <strong>{{connector.bridge.appName}}</strong><br>
+                           Project link: <strong>{{connector.bridge.projectLink}}</strong>
+                        </mat-radio-button>
+                     </mat-radio-group>
+                  </div>
+
 
                   <div class="modal-footer">
                      <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
@@ -402,7 +637,11 @@
                      data-original-title="Fix" *ngIf="row.violated" data-dismiss="modal"><i class="fa fa-wrench"></i> </a>
                       </tr>
                   </tbody>
-                </table>
+               </table>
+               <a (click)="downloadHistory()" class="btn btn-primary tooltips" data-placement="top"
+                     data-original-title="Download"><i class="fa fa-download"></i></a>
+               <a *ngIf="historyConnector?.suppProjectLink != null" (click)="downloadSuppHistory(historyConnector.id)" class="btn btn-danger primary" data-placement="top"
+                     data-original-title="Download Monitored Project"><i class="fa fa-download"></i></a>
             </div>
          </div>
       </div>

@@ -6,18 +6,30 @@ import { ConnectorService } from './connector.service';
 import { Bridge } from './interface/bridge';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Alignment } from './interface/alignment';
+import { MatRadioButton, MatRadioChange } from '@angular/material/radio';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
+  
 export class AppComponent implements OnInit {
   public connectorList: Connector[] = [];
   public editConnector!: Connector;
   public deleteConnector!: Connector;
   public monitoringConnector!: Connector;
   public historyConnector!: Connector;
+  public baseConnectorId !: string;
+  public updatePMSConfigurationResponse !: string;
+
+  pmsFunctions: string[] = ['verify', 'createProcess', 'validateTask', 'startTask', 'endTask'];
+  appMessageInfo: string[] = ['id', 'time', 'title', 'committer'];
+  
+  listNbParams = Array.from(Array(5).keys());
+  nbParam = 0;
+  listTrueNbParams = Array.from(Array(this.nbParam).keys());
+  
 
   constructor(private connectorService: ConnectorService) { }
 
@@ -25,16 +37,24 @@ export class AppComponent implements OnInit {
     this.getConnectors();
   }
 
+  public onChange(connectorChange: MatRadioChange) {
+    this.baseConnectorId = connectorChange.value;
+ } 
+
   public getConnectors(): void {
     this.connectorService.getConnectors().subscribe(
       (response: Connector[]) => {
+        // console.log(response);
         this.connectorList = response;
+        console.log(this.connectorList);
+        // console.log(response);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
       }
     );
   }
+
 
   public onAddConnector(addForm: NgForm): void {
     document.getElementById('add-connector-form')?.click();
@@ -47,6 +67,22 @@ export class AppComponent implements OnInit {
       (error: HttpErrorResponse) => {
         alert(error.message);
         addForm.reset();
+      }
+    );
+  }
+
+  public onAddSuppConnector(addSuppForm: NgForm): void {
+    document.getElementById('add-supp-connector-form')?.click();
+    console.log(addSuppForm.value);
+    this.connectorService.addSuppConnector(addSuppForm.value, this.baseConnectorId).subscribe(
+      (response: string) => {
+        console.log(response);
+        this.getConnectors();
+        addSuppForm.reset();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+        addSuppForm.reset();
       }
     );
   }
@@ -83,8 +119,33 @@ export class AppComponent implements OnInit {
   }
 
   public onUpdateConnector(connectorId: string, bridge: Bridge): void {
-    this.connectorService.updateConnector(connectorId, bridge).subscribe(
-      (response: void) => {
+    if (this.baseConnectorId != undefined) {
+      console.log(this.baseConnectorId);
+      this.connectorService.updateSuppConnector(connectorId, bridge, this.baseConnectorId).subscribe(
+        (response: void) => {
+          this.getConnectors();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    } else {
+      this.connectorService.updateConnector(connectorId, bridge).subscribe(
+        (response: void) => {
+          this.getConnectors();
+        },
+        (error: HttpErrorResponse) => {
+          alert(error.message);
+        }
+      );
+    }
+  }
+
+  public onUpdatePMSConfig(updatePMSForm: NgForm): void {
+    console.log(updatePMSForm.value);
+    this.connectorService.updatePMSConfig(updatePMSForm.value).subscribe(
+      (response: string) => {
+        this.updatePMSConfigurationResponse = response;
         console.log(response);
         this.getConnectors();
       },
@@ -92,6 +153,10 @@ export class AppComponent implements OnInit {
         alert(error.message);
       }
     );
+  }
+
+  public onUpdateAppConfig(updateAppForm: NgForm): void {
+
   }
 
   public onDeleteConnector(connectorId?: string): void {
@@ -156,7 +221,8 @@ export class AppComponent implements OnInit {
         || connector.bridge.pmsName.toLowerCase().indexOf(key.toLowerCase()) !== -1
         || connector.bridge.appName.toLowerCase().indexOf(key.toLowerCase()) !== -1
         || connector.bridge.userNameApp.toLowerCase().indexOf(key.toLowerCase()) !== -1
-        || connector.bridge.projectLink.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
+        || connector.bridge.projectLink.toLowerCase().indexOf(key.toLowerCase()) !== -1
+        || connector.userName.toLowerCase().indexOf(key.toLowerCase()) !== -1) {
         results.push(connector);
       }
     }
@@ -177,6 +243,59 @@ export class AppComponent implements OnInit {
   }
 
 
+  public downloadHistory(): void {
+    const colList = ["commitId", "commitTime", "processInstanceChange", "processInstanceChangeTime", "taskFound", "monitoringMessage", "violated"];
+    this.exportToCsv(this.historyConnector.historyCommitList, "history", colList);
+  }
+
+  public downloadSuppHistory(connectorId: string): void {
+    this.connectorService.downloadConnectorHistory(connectorId).subscribe(
+      (response: Alignment[]) => {
+        console.log(response);
+        const colList = ["commitId", "commitTime", "processInstanceChange", "processInstanceChangeTime", "taskFound", "monitoringMessage", "violated"];
+    this.exportToCsv(response, "supp_history", colList);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+    
+  }
+
+  private saveAsFile(buffer: any, fileName: string, fileType: string): void {
+    const blob = new Blob([buffer], { type: fileType});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = fileName;
+    a.click();
+  }
+
+
+  public exportToCsv(data: Alignment[], fileName: string, keys: string[]): void {
+    let dataObj: Array<any> = Array.from(data);
+    let rows: string[] = [];
+    let header = keys.join(",") + "\n";
+    let csvContent = header;
+
+    dataObj.forEach((item) => {
+      let values: string[] = [];
+      keys.forEach((key) => {
+        let val: any = item[key];
+
+        if (val !== undefined && val !== null) {
+          val = new String(val);
+        } else {
+          val = "";
+        }
+        values.push(val);
+      });
+      rows.push(values.join(","));
+    })
+    csvContent += rows.join("\n");
+    this.saveAsFile(csvContent, `${fileName}.csv`, 'text/csv');
+  }
+
+
   public onOpenModal(connector: Connector | null, mode: string): void {
     const container = document.getElementById('main-container');
     const button = document.createElement('button');
@@ -186,6 +305,9 @@ export class AppComponent implements OnInit {
 
     if (mode === 'add') {
       button.setAttribute('data-target', '#addConnectorModal');
+    }
+    if (mode === 'add-config') {
+      button.setAttribute('data-target', '#addConfigModal');
     }
     if (mode === 'start_monitor') {
       if (connector) {
@@ -204,8 +326,9 @@ export class AppComponent implements OnInit {
         button.setAttribute('data-target', '#stopMonitorConnectorModal');
     }
     if (mode === 'edit') {
-      if (connector)
+      if (connector) {
         this.editConnector = connector;
+      }
       button.setAttribute('data-target', '#updateConnectorModal');
     }
     if (mode === 'delete') {

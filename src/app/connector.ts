@@ -15,4 +15,6 @@ export interface Connector {
     monitoring: boolean;
     retriever: Retriever;
     pmsConfig: PmsConfig;
+    userName: string;
+    suppProjectLink: string;
 }

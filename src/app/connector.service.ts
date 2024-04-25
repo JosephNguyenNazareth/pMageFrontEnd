@@ -4,6 +4,8 @@ import { HttpClient, HttpParams } from '@angular/common/http'
 import { Connector } from './connector';
 import { environment } from 'src/environments/environment';
 import { Bridge } from './interface/bridge';
+import { Alignment } from './interface/alignment';
+// import { PMSConnection } from './interface/pmsconnection';
 
 @Injectable({providedIn: 'root'})
 export class ConnectorService {
@@ -19,8 +21,20 @@ export class ConnectorService {
         return this.http.post(`${this.apiServerUrl}/api/pmage/add`, bridge, {responseType: 'text'});
     }
 
+    public addSuppConnector(bridge: Bridge, baseConnectorId: string): Observable<string> {
+        return this.http.post(`${this.apiServerUrl}/api/pmage/add-supp/${baseConnectorId}`, bridge, {responseType: 'text'});
+    }
+
+    public updatePMSConfig(pmsConfig: string): Observable<string> {
+        return this.http.post(`${this.apiServerUrl}/api/pmage/pms-config`, pmsConfig, {responseType: 'text'});
+    }
+
     public updateConnector(connectorId: string, bridge : Bridge): Observable<void> {
         return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update/${connectorId}`, bridge);
+    }
+
+    public updateSuppConnector(connectorId: string, bridge : Bridge, baseConnectorId: string): Observable<void> {
+        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update-supp/${connectorId}`, bridge, { params: {baseConnectorId: baseConnectorId }});
     }
 
     public deleteConnector(connectorId: string): Observable<void> {
@@ -45,5 +59,9 @@ export class ConnectorService {
 
     public getConnectorHistory(connectorId: string): Observable<void> {
         return this.http.get<void>(`${this.apiServerUrl}/api/pmage/${connectorId}/history`);
+    }
+
+    public downloadConnectorHistory(connectorId: string): Observable<Alignment[]> {
+        return this.http.get<Alignment[]>(`${this.apiServerUrl}/api/pmage/${connectorId}/collect-hist`);
     }
 }

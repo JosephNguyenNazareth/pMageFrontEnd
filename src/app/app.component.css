@@ -1,0 +1,13 @@
+.base-connector-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+  
+.base-connector-radio-button {
+    margin: 5px;
+  }
+
+::ng-deep .cdk-overlay-container {
+    z-index: 9999;
+}

@@ -7,6 +7,7 @@ export interface Bridge {
     pmsName: string;
     pmsUrl: string;
     userNamePms : string;
-    passwordPms : string;
+    passwordPms: string;
+    processDef: string;
     processId : string;
 }

@@ -23,18 +23,28 @@ export class AppComponent implements OnInit {
   public baseConnectorId !: string;
   public updatePMSConfigurationResponse !: string;
 
-  pmsFunctions: string[] = ['verify', 'createProcess', 'validateTask', 'startTask', 'endTask'];
+  pmsFunctions = new Map<string, string>();
   appMessageInfo: string[] = ['id', 'time', 'title', 'committer'];
   
   listNbParams = Array.from(Array(5).keys());
   nbParam = 0;
   listTrueNbParams = Array.from(Array(this.nbParam).keys());
   
+  caseIdList: string[] = [];
+  selectedCaseId: string = "";
 
   constructor(private connectorService: ConnectorService) { }
 
   ngOnInit(): void {
     this.getConnectors();
+
+    this.pmsFunctions.set('login', 'Authentication information to access process instance in the PMS. Ex: http://localhost:8080/bonita/loginservice');
+    this.pmsFunctions.set('verify', 'Process Instance availability verification. Ex: http://localhost:8080/bonita/API/bpm/case/{processInstanceId}',);
+    this.pmsFunctions.set('getTask', 'Collect all the related task to the user. Ex: http://localhost:8080/bonita/API/bpm/task?f=caseId={processInstanceId}',);
+    this.pmsFunctions.set('validateTask', 'Task instance availability verification. Ex: http://localhost:8080/bonita/API/bpm/task/{taskInstanceId}',);
+    this.pmsFunctions.set('startTask', 'Start a task instance',);
+    this.pmsFunctions.set('endTask', 'Complete a task instance. Ex: http://localhost:8080/bonita/API/bpm/task/{taskInstanceId}',);
+    this.pmsFunctions.set('getArtifact', 'Collect all artifacts of the related task to the user');
   }
 
   public onChange(connectorChange: MatRadioChange) {
@@ -58,6 +68,7 @@ export class AppComponent implements OnInit {
 
   public onAddConnector(addForm: NgForm): void {
     document.getElementById('add-connector-form')?.click();
+    console.log(addForm.value);
     this.connectorService.addConnector(addForm.value).subscribe(
       (response: string) => {
         console.log(response);
@@ -293,6 +304,20 @@ export class AppComponent implements OnInit {
     })
     csvContent += rows.join("\n");
     this.saveAsFile(csvContent, `${fileName}.csv`, 'text/csv');
+  }
+
+  public updateProcessInstanceId(pmsName: string, pmsUrl: string, usernamePms: string, passwordPms: string, processDef: string): void {
+    if (this.selectedCaseId == "reload") {
+      this.connectorService.getCaseId(pmsName, pmsUrl, usernamePms, passwordPms, processDef).subscribe(
+        (response: string[]) => {
+          console.log(response);
+          this.caseIdList = response;
+        },
+        (error: HttpErrorResponse) => {
+          alert("No process instance found for the following information. Please try again.");
+        }
+      );
+    }
   }
 
 

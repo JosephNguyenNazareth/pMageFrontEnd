@@ -64,4 +64,8 @@ export class ConnectorService {
     public downloadConnectorHistory(connectorId: string): Observable<Alignment[]> {
         return this.http.get<Alignment[]>(`${this.apiServerUrl}/api/pmage/${connectorId}/collect-hist`);
     }
+
+    public getCaseId(pmsName: string, pmsUrl: string, usernamePms: string, passwordPms: string, processDef: string): Observable<string[]> {
+        return this.http.get<string[]>(`${this.apiServerUrl}/api/pmage/caseid`, { params: {pmsName: pmsName, pmsURL: pmsUrl, usernamePMS: usernamePms, passwordPMS: passwordPms, processDef: processDef}});
+    }
 }

@@ -104,46 +104,55 @@
                            <div class="col-md-4">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Name</mat-label>
-                                 <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
+                                 <input ngModel name="pmsName" id="pmsName" #pmsName matInput placeholder="PMS Name"
                                     required>
                               </mat-form-field>
                            </div>
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Url</mat-label>
-                                 <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
+                                 <input ngModel name="pmsUrl" id="pmsUrl" #pmsUrl matInput placeholder="PMS Url"
                                     required>
                               </mat-form-field>
                            </div>
                         </div>
-                        
-                        
-                        <div class="mb-3">
-                           <mat-form-field class="example-full-width">
-                              <mat-label>PMS Process Instance Id</mat-label>
-                              <input ngModel name="processId" id="processIdEdit"
-                                 matInput placeholder="PMS Process Instance ID">
-                           </mat-form-field>
-                        </div>
-                        
-   
+
+
                         <div class="row gx-3 mb-3">
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Username</mat-label>
-                                 <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                                 <input ngModel name="usernamePms" id="usernamePms" #usernamePms matInput placeholder="Ex. John" required>
                               </mat-form-field>
                            </div>
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Password</mat-label>
-                                 <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
+                                 <input type="password" ngModel name="passwordPms" id="passwordPms" #passwordPms [type]="hide ? 'password' : 'text'"
                                     matInput placeholder="PMS Password" required>
                                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                               </mat-form-field>
                            </div>
                         </div>
                         
+                        
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Process Instance Name</mat-label>
+                                 <input ngModel name="processDef" id="processDef" #processDef
+                                    matInput placeholder="PMS Process Instance Name">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-4">
+                              <mat-form-field>
+                                 <mat-select [(value)]="selectedCaseId"  placeholder="PMS Process Instance Id" (selectionChange)="updateProcessInstanceId(pmsName.value, pmsUrl.value, usernamePms.value, passwordPms.value, processDef.value)">
+                                   <mat-option value="reload">Reload</mat-option>
+                                   <mat-option [value]="caseId" *ngFor="let caseId of caseIdList">{{caseId}}</mat-option>
+                                 </mat-select>
+                               </mat-form-field>
+                           </div>
+                        </div>                        
                         
                         
                         <h2>Application</h2>
@@ -330,7 +339,6 @@
                <mat-tab-group animationDuration="0ms">
                   <mat-tab label="Update PMS configuration">
                      <form #pmsForm="ngForm" (ngSubmit)="onUpdatePMSConfig(pmsForm)">
-                        <h3>Functions</h3>
                         <div class="row gx-3 mb-3">
                            <div class="col md-6">
                               <mat-form-field class="example-full-width">
@@ -342,32 +350,43 @@
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS URL</mat-label>
-                                 <input ngModel name="pmsUrl" id="pmsURL" matInput placeholder="URL PMS">
+                                 <input ngModel name="pmsUrl" id="pmsURL" matInput placeholder="Ex: http://localhost:8080/bonita">
                               </mat-form-field>
                            </div>
                         </div>
-
-                        <div class="mb-3" *ngFor="let func of pmsFunctions">
+                        
+                        <h2>Functions</h2>
+                        <div class="mb-3" *ngFor="let func of pmsFunctions | keyvalue">
+                           <h4>{{func.key}}</h4>
                            <mat-form-field class="example-full-width">
-                              <mat-label>{{func}}</mat-label>
+                              <mat-label>URL</mat-label>
                               <input ngModel name="{{func}}_url" id="{{func}}_url"
-                                 matInput placeholder="URL">
+                                 matInput placeholder="{{func.value}}">
                            </mat-form-field>
                            <div class="row gx-3 mb-3">
                               <div class="col md-4">
                                  <mat-form-field class="example-full-width">
-                                    <mat-label>Parameters</mat-label>
+                                    <mat-label>Headers</mat-label>
                                     <input ngModel name="{{func}}_param" id="{{func}}_param"
-                                       matInput placeholder="URL Parameters">
+                                       matInput placeholder="URL Headers. Ex: JSESSIONID, API-Token, etc. Leave blank if there is none.">
                                  </mat-form-field>
                               </div>
-                              <div class="col-md-8">
+                              
+                              <div class="col md-4">
+                                 <mat-form-field class="example-full-width">
+                                    <mat-label>Parameters</mat-label>
+                                    <input ngModel name="{{func}}_param" id="{{func}}_param"
+                                       matInput placeholder="URL Parameters. Leave blank if there is none.">
+                                 </mat-form-field>
+                              </div>
+                              <div class="col-md-4">
                                  <mat-form-field class="example-full-width">
                                     <mat-label>Body</mat-label>
-                                    <textarea ngModel name="{{func}}_body" id="{{func}}_body" matInput placeholder="URL Body"></textarea>
+                                    <textarea ngModel name="{{func}}_body" id="{{func}}_body" matInput placeholder="URL Body. Ex: {'state' :  'completed'}. Leave blank if there is none."></textarea>
                                  </mat-form-field>
                               </div>
                            </div>
+
                         </div>
                         <p>{{updatePMSConfigurationResponse}}</p>
                         

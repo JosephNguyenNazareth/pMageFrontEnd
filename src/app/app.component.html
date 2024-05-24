@@ -152,7 +152,7 @@
                                  </mat-select>
                                </mat-form-field>
                            </div>
-                        </div>                        
+                        </div>
                         
                         
                         <h2>Application</h2>
@@ -482,6 +482,15 @@
                         </mat-form-field>
                      </div>
                   </div>
+
+                  <mat-form-field class="example-full-width" *ngIf="editConnector?.bridge?.pmsName == 'bonita'">
+                     <mat-label>Input Artifact : Task : Output Artifact</mat-label>
+                     <textarea matInput placeholder="Ex. CompleteBrakeSystem,RSDsCar : Asssess RSD installation : BrakeSystemAssessment" name="taskArtifact" id="taskArtifact" ngModel
+                     cdkTextareaAutosize
+                     #autosize="cdkTextareaAutosize"
+                     cdkAutosizeMinRows="10"
+                     cdkAutosizeMaxRows="10"></textarea>
+                  </mat-form-field>
                   
                   
                   <h2>App Connection Configuration</h2>
@@ -545,7 +554,7 @@
 
                   <div class="modal-footer">
                      <button type="button" id="" data-dismiss="modal" class="btn btn-secondary">Close</button>
-                     <button (click)="onUpdateConnector(editConnector.id, editForm.value)" data-dismiss="modal"
+                     <button (click)="onUpdateConnector(editConnector.id, editForm.value, editForm.value.taskArtifact)" data-dismiss="modal"
                         class="btn btn-primary">Save changes</button>
                   </div>
                </form>
@@ -687,7 +696,7 @@
                      #autosize="cdkTextareaAutosize"
                      cdkAutosizeMinRows="1"
                      cdkAutosizeMaxRows="10"></textarea>
-                   </mat-form-field>
+                  </mat-form-field>
                    {{addActionForm.value.actionEventDescription}}
                    <div class="modal-footer">
                      <button type="button" class="btn btn-success" (click)="onGenerateActionTable(editConnector.id)" id="generate-add-action-table" >Generate</button>

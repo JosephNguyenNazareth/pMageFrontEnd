@@ -129,10 +129,10 @@ export class AppComponent implements OnInit {
     );
   }
 
-  public onUpdateConnector(connectorId: string, bridge: Bridge): void {
+  public onUpdateConnector(connectorId: string, bridge: Bridge, taskArtifact: string): void {
     if (this.baseConnectorId != undefined) {
       console.log(this.baseConnectorId);
-      this.connectorService.updateSuppConnector(connectorId, bridge, this.baseConnectorId).subscribe(
+      this.connectorService.updateSuppConnector(connectorId, bridge, this.baseConnectorId, taskArtifact).subscribe(
         (response: void) => {
           this.getConnectors();
         },
@@ -141,7 +141,7 @@ export class AppComponent implements OnInit {
         }
       );
     } else {
-      this.connectorService.updateConnector(connectorId, bridge).subscribe(
+      this.connectorService.updateConnector(connectorId, bridge, taskArtifact).subscribe(
         (response: void) => {
           this.getConnectors();
         },

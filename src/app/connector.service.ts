@@ -29,12 +29,12 @@ export class ConnectorService {
         return this.http.post(`${this.apiServerUrl}/api/pmage/pms-config`, pmsConfig, {responseType: 'text'});
     }
 
-    public updateConnector(connectorId: string, bridge : Bridge): Observable<void> {
-        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update/${connectorId}`, bridge);
+    public updateConnector(connectorId: string, bridge : Bridge, taskArtifact: string): Observable<void> {
+        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update/${connectorId}`, bridge, {params: {taskArtifact: taskArtifact}});
     }
 
-    public updateSuppConnector(connectorId: string, bridge : Bridge, baseConnectorId: string): Observable<void> {
-        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update-supp/${connectorId}`, bridge, { params: {baseConnectorId: baseConnectorId }});
+    public updateSuppConnector(connectorId: string, bridge : Bridge, baseConnectorId: string, taskArtifact: string): Observable<void> {
+        return this.http.put<void>(`${this.apiServerUrl}/api/pmage/update-supp/${connectorId}`, bridge, { params: {baseConnectorId: baseConnectorId, taskArtifact: taskArtifact }});
     }
 
     public deleteConnector(connectorId: string): Observable<void> {

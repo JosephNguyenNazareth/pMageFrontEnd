@@ -5,6 +5,7 @@ import { Connector } from './connector';
 import { environment } from 'src/environments/environment';
 import { Bridge } from './interface/bridge';
 import { Alignment } from './interface/alignment';
+import { UserPMage } from './interface/userpmage';
 // import { PMSConnection } from './interface/pmsconnection';
 
 @Injectable({providedIn: 'root'})
@@ -15,6 +16,10 @@ export class ConnectorService {
 
     public getConnectors(): Observable<Connector[]> {
         return this.http.get<Connector[]>(`${this.apiServerUrl}/api/pmage`);
+    }
+
+    public getUserConnectors(userName: string): Observable<Connector[]> {
+        return this.http.get<Connector[]>(`${this.apiServerUrl}/api/pmage/user-connector/${userName}`);
     }
 
     public addConnector(bridge : Bridge): Observable<string> {
@@ -67,5 +72,14 @@ export class ConnectorService {
 
     public getCaseId(pmsName: string, pmsUrl: string, usernamePms: string, passwordPms: string, processDef: string): Observable<string[]> {
         return this.http.get<string[]>(`${this.apiServerUrl}/api/pmage/caseid`, { params: {pmsName: pmsName, pmsURL: pmsUrl, usernamePMS: usernamePms, passwordPMS: passwordPms, processDef: processDef}});
+    }
+
+    public login(userName: string, password: string): Observable<UserPMage> {
+        const params = new HttpParams().append('userName', userName).append("password", password);
+        return this.http.get<UserPMage>(`${this.apiServerUrl}/pmage/user/login`, {params})
+    }
+
+    public register(userName: string, password: string, role: string): Observable<void> {
+        return this.http.post<void>(`${this.apiServerUrl}/pmage/user/add`, {}, {params: {userName: userName, password: password, role: role}})
     }
 }

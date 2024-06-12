@@ -7,6 +7,7 @@ import { Bridge } from './interface/bridge';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Alignment } from './interface/alignment';
 import { MatRadioButton, MatRadioChange } from '@angular/material/radio';
+import { UserPMage } from './interface/userpmage';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit {
   public historyConnector!: Connector;
   public baseConnectorId !: string;
   public updatePMSConfigurationResponse !: string;
+  public currentUser!: string;
 
   pmsFunctions = new Map<string, string>();
   appMessageInfo: string[] = ['id', 'time', 'title', 'committer'];
@@ -96,6 +98,48 @@ export class AppComponent implements OnInit {
         addSuppForm.reset();
       }
     );
+  }
+
+  public onLogin(loginForm: NgForm): void {
+    console.log(loginForm.value.userName);
+    this.connectorService.login(loginForm.value.userName, loginForm.value.password).subscribe(
+      (response: UserPMage) => {
+        this.currentUser = response.userName;
+        this.connectorService.getUserConnectors(response.userName).subscribe(
+          (response: Connector[]) => {
+            this.connectorList = response;
+            console.log(this.connectorList);
+          },
+          (error: HttpErrorResponse) => {
+            alert(error.message);
+          }
+        );
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
+  }
+
+  public onRegister(registerForm: NgForm): void {
+    console.log(registerForm.value.userName);
+    this.connectorService.register(registerForm.value.userName, registerForm.value.password, registerForm.value.role).subscribe(
+      (response: void) => {
+        this.currentUser = registerForm.value.userName;
+        this.connectorService.getUserConnectors(registerForm.value.userName).subscribe(
+          (response: Connector[]) => {
+            this.connectorList = response;
+            console.log(this.connectorList);
+          },
+          (error: HttpErrorResponse) => {
+            alert(error.message);
+          }
+        );
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    )
   }
 
   public onGenerateActionTable(connectorId: string): void {
@@ -330,6 +374,9 @@ export class AppComponent implements OnInit {
 
     if (mode === 'add') {
       button.setAttribute('data-target', '#addConnectorModal');
+    }
+    if (mode === 'login') {
+      button.setAttribute('data-target', '#loginModal');
     }
     if (mode === 'add-config') {
       button.setAttribute('data-target', '#addConfigModal');

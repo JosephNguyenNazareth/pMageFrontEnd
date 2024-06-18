@@ -1,5 +1,5 @@
-import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { HttpErrorResponse, HttpEventType, HttpResponse } from '@angular/common/http';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Connector } from './connector';
 import { ConnectorService } from './connector.service';
@@ -8,6 +8,8 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Alignment } from './interface/alignment';
 import { MatRadioButton, MatRadioChange } from '@angular/material/radio';
 import { UserPMage } from './interface/userpmage';
+import { FileUploadService } from './services/file-upload.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +37,16 @@ export class AppComponent implements OnInit {
   caseIdList: string[] = [];
   selectedCaseId: string = "";
 
-  constructor(private connectorService: ConnectorService) { }
+  projectMode: string = "";
+  currentFile?: File;
+  progress = 0;
+  message = '';
+
+  fileName = 'Select File';
+  fileInfos?: Observable<any>;
+
+  constructor(private connectorService: ConnectorService, private uploadService: FileUploadService) { }
+
 
   ngOnInit(): void {
     this.getConnectors();
@@ -266,6 +277,46 @@ export class AppComponent implements OnInit {
         alert(error.message);
       }
     );
+  }
+
+  selectFile(event: any): void {
+    if (event.target.files && event.target.files[0]) {
+      const file: File = event.target.files[0];
+      this.currentFile = file;
+      this.fileName = this.currentFile.name;
+    } else {
+      this.fileName = 'Select File';
+    }
+  }
+
+  upload(): void {
+    this.progress = 0;
+    this.message = '';
+
+    if (this.currentFile) {
+      this.uploadService.upload(this.currentFile).subscribe(
+        (event: any) => {
+          if (event.type === HttpEventType.UploadProgress) {
+            this.progress = Math.round((100 * event.loaded) / event.total);
+          } else if (event instanceof HttpResponse) {
+            this.message = event.body.message;
+            this.fileInfos = this.uploadService.getFiles();
+          }
+        },
+        (err: any) => {
+          console.log(err);
+          this.progress = 0;
+
+          if (err.error && err.error.message) {
+            this.message = err.error.message;
+          } else {
+            this.message = 'Could not upload the file!';
+          }
+
+          this.currentFile = undefined;
+        }
+      );
+    }
   }
 
 

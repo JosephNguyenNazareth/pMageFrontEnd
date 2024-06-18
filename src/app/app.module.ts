@@ -13,6 +13,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatRadioModule } from '@angular/material/radio'; 
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,8 @@ import { MatSelectModule } from '@angular/material/select';
     BrowserModule,
     HttpClientModule, FormsModule, BrowserAnimationsModule,
     MatFormFieldModule, MatInputModule, MatToolbarModule, MatIconModule,
-    MatTabsModule, MatRadioModule, ReactiveFormsModule, MatSelectModule
+    MatTabsModule, MatRadioModule, ReactiveFormsModule, MatSelectModule,
+    MatProgressBarModule, MatCardModule
   ],
   providers: [ConnectorService],
   bootstrap: [AppComponent]

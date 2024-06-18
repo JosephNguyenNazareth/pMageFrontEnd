@@ -364,8 +364,37 @@
                         </div>
                         
                         <h2>Supplementary Application</h2>
+                        
+                        <!-- radio button choosing if the monitored project is connected with pmage or not -->
+                        <mat-radio-group aria-labelledby="application-mode" class="application-mode-radio-group" name="application-mode" [(ngModel)]="projectMode">
+                           <mat-radio-button value="non-connect">Non-connected project</mat-radio-button>
+                           <mat-radio-button value="connect">Connected project</mat-radio-button>
+                        </mat-radio-group>
 
-                        <mat-radio-group aria-labelledby="base-connector" class="base-connector-radio-group" name="base-connector" [(ngModel)]="baseConnectorId">
+                        <!-- in case the monitored project has been done without connected to pmage, add a zip file containing all the related artifacts for the monitoring process -->
+                        <div *ngIf="projectMode === 'non-connect'">
+                           <mat-toolbar *ngIf="currentFile" class="progress-bar">
+                              <mat-progress-bar color="accent" [value]="progress"></mat-progress-bar>
+                              <span class="progress">{{ progress }}%</span>
+                           </mat-toolbar>
+                         
+                           <mat-form-field>
+                              <div>
+                                 <mat-toolbar>
+                                    <input matInput [value]="fileName" />
+                                    <button mat-flat-button color="primary" [disabled]="!currentFile" (click)="upload()">Upload</button>
+                                 </mat-toolbar>
+                                 <input type="file" id="fileInput" (change)="selectFile($event)" name="fileInput" />
+                              </div>
+                           </mat-form-field>
+
+                           <div *ngIf="message" class="message">
+                              {{ message }}
+                           </div>
+                        </div>
+
+                        <!-- in case the monitored project is connected -->
+                        <mat-radio-group aria-labelledby="base-connector" class="base-connector-radio-group" name="base-connector" *ngIf="projectMode === 'connect'" [(ngModel)]="baseConnectorId">
                            <mat-radio-button class="base-connector-radio-button" *ngFor="let connector of connectorList" [value]="connector.id">
                               Base connecter ID: <strong>{{connector.id}}</strong><br>
                               Application: <strong>{{connector.bridge.appName}}</strong><br>

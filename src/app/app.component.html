@@ -103,7 +103,7 @@
                            </mat-form-field>
                            <mat-form-field class="example-full-width">
                               <mat-label>Password</mat-label>
-                              <input ngModel name="password" id="password" matInput placeholder="pMage password" required>
+                              <input ngModel type="password" name="password" id="password" matInput placeholder="pMage password" required>
                            </mat-form-field>
                            <div class="modal-footer">
                               <button type="button" id="login-form" class="btn btn-secondary"
@@ -165,15 +165,15 @@
                            <div class="col-md-4">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Name</mat-label>
-                                 <input ngModel name="pmsName" id="pmsName" #pmsName matInput placeholder="PMS Name"
-                                    required>
+                                 <mat-select [(value)]="selectedPMS" name="pmsName" id="pmsName" #pmsName placeholder="PMS Name" (selectionChange)="updateProcessInfo()">
+                                    <mat-option [value]="pms" *ngFor="let pms of pmsList">{{pms}}</mat-option>
+                                 </mat-select>
                               </mat-form-field>
                            </div>
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Url</mat-label>
-                                 <input ngModel name="pmsUrl" id="pmsUrl" #pmsUrl matInput placeholder="PMS Url"
-                                    required>
+                                 <input ngModel name="pmsUrl" id="pmsUrl" #pmsUrl matInput placeholder="PMS Url" [value]="pmsCommonInfoList[0]?.pmsUrl" required>
                               </mat-form-field>
                            </div>
                         </div>
@@ -183,14 +183,13 @@
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Username</mat-label>
-                                 <input ngModel name="usernamePms" id="usernamePms" #usernamePms matInput placeholder="Ex. John" required>
+                                 <input ngModel name="usernamePms" id="usernamePms" #usernamePms matInput placeholder="Ex. John" [value]="pmsCommonInfoList[0]?.userNamePms" required>
                               </mat-form-field>
                            </div>
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Password</mat-label>
-                                 <input type="password" ngModel name="passwordPms" id="passwordPms" #passwordPms [type]="hide ? 'password' : 'text'"
-                                    matInput placeholder="PMS Password" required>
+                                 <input type="password" ngModel name="passwordPms" id="passwordPms" #passwordPms [type]="hide ? 'password' : 'text'" matInput placeholder="PMS Password" [value]="pmsCommonInfoList[0]?.passwordPms" required>
                                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                               </mat-form-field>
                            </div>

@@ -10,6 +10,7 @@ import { MatRadioButton, MatRadioChange } from '@angular/material/radio';
 import { UserPMage } from './interface/userpmage';
 import { FileUploadService } from './services/file-upload.service';
 import { Observable } from 'rxjs';
+import { PMSScore } from './interface/pmsscore';
 
 @Component({
   selector: 'app-root',
@@ -19,6 +20,7 @@ import { Observable } from 'rxjs';
   
 export class AppComponent implements OnInit {
   public connectorList: Connector[] = [];
+  public pmsList: string[] = [];
   public editConnector!: Connector;
   public deleteConnector!: Connector;
   public monitoringConnector!: Connector;
@@ -34,6 +36,8 @@ export class AppComponent implements OnInit {
   nbParam = 0;
   listTrueNbParams = Array.from(Array(this.nbParam).keys());
   
+  selectedPMS: string = "";
+  pmsCommonInfoList: PMSScore[] = [];
   caseIdList: string[] = [];
   selectedCaseId: string = "";
 
@@ -41,15 +45,16 @@ export class AppComponent implements OnInit {
   currentFile?: File;
   progress = 0;
   message = '';
-
   fileName = 'Select File';
   fileInfos?: Observable<any>;
+
 
   constructor(private connectorService: ConnectorService, private uploadService: FileUploadService) { }
 
 
   ngOnInit(): void {
     this.getConnectors();
+    this.getPMSList();
 
     this.pmsFunctions.set('login', 'Authentication information to access process instance in the PMS. Ex: http://localhost:8080/bonita/loginservice');
     this.pmsFunctions.set('verify', 'Process Instance availability verification. Ex: http://localhost:8080/bonita/API/bpm/case/{processInstanceId}',);
@@ -62,15 +67,25 @@ export class AppComponent implements OnInit {
 
   public onChange(connectorChange: MatRadioChange) {
     this.baseConnectorId = connectorChange.value;
- } 
+ }
+ 
+  public getPMSList(): void {
+    this.connectorService.getPMSList().subscribe(
+      (response: string[]) => {
+        this.pmsList = response;
+        console.log(this.pmsList);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
 
   public getConnectors(): void {
     this.connectorService.getConnectors().subscribe(
       (response: Connector[]) => {
-        // console.log(response);
         this.connectorList = response;
         console.log(this.connectorList);
-        // console.log(response);
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -415,6 +430,19 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public updateProcessInfo(): void {
+    if (this.currentUser !== "" && this.selectedPMS !== "") {
+      this.connectorService.getCommonProcessInfo(this.currentUser, this.selectedPMS).subscribe(
+        (response: PMSScore[]) => {
+          console.log(response);
+          this.pmsCommonInfoList = response;
+        },
+        (error: HttpErrorResponse) => {
+          alert("No process instance found for the following information. Please try again.");
+        }
+      );
+    }
+  }
 
   public onOpenModal(connector: Connector | null, mode: string): void {
     const container = document.getElementById('main-container');

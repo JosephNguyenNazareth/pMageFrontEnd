@@ -7,6 +7,7 @@ import { Bridge } from './interface/bridge';
 import { Alignment } from './interface/alignment';
 import { UserPMage } from './interface/userpmage';
 import { PMSScore } from './interface/pmsscore';
+import { AppScore } from './interface/appscore';
 // import { PMSConnection } from './interface/pmsconnection';
 
 @Injectable({providedIn: 'root'})
@@ -21,6 +22,10 @@ export class ConnectorService {
 
     public getPMSList(): Observable<string[]> {
         return this.http.get<string[]>(`${this.apiServerUrl}/api/pmage/pms-resources`);
+    }
+
+    public getAppList(): Observable<string[]> {
+        return this.http.get<string[]>(`${this.apiServerUrl}/api/pmage/app-resources`);
     }
 
     public getUserConnectors(userName: string): Observable<Connector[]> {
@@ -90,5 +95,9 @@ export class ConnectorService {
 
     public getCommonProcessInfo(userName: string, pmsName: string): Observable<PMSScore[]> {
         return this.http.get<PMSScore[]>(`${this.apiServerUrl}/pmage/user/${userName}/pms-info`, {params: {selectedPMS: pmsName}})
+    }
+
+    public getCommonAppInfo(userName: string, appName: string): Observable<AppScore[]> {
+        return this.http.get<AppScore[]>(`${this.apiServerUrl}/pmage/user/${userName}/app-info`, {params: {selectedApp: appName}})
     }
 }

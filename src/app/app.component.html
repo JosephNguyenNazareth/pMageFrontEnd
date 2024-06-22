@@ -195,7 +195,6 @@
                            </div>
                         </div>
                         
-                        
                         <div class="row gx-3 mb-3">
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
@@ -220,15 +219,17 @@
                            <div class="col-md-4">
                               <mat-form-field class="example-full-width">
                                  <mat-label>Application name</mat-label>
-                                 <input ngModel name="appName" id="appNameEdit"
-                                    matInput placeholder="Appname" required>
+                                 <!-- <input ngModel name="appName" id="appNameEdit"
+                                    matInput placeholder="Appname" required> -->
+                                 <mat-select [(value)]="selectedApp" name="appName" id="appName" #pmsName placeholder="Appname" (selectionChange)="updateAppInfo()">
+                                    <mat-option [value]="app" *ngFor="let app of appList">{{app}}</mat-option>
+                                 </mat-select>
                               </mat-form-field>
                            </div>
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
                                  <mat-label>Project Remote Link</mat-label>
-                                 <input ngModel name="projectLink" id="projectLinkEdit"
-                                    matInput placeholder="Project Remote Link">
+                                 <input ngModel name="projectLink" id="projectLinkEdit" matInput placeholder="Project Remote Link" [value]="appCommonInfoList[0]?.projectLink">
                               </mat-form-field>
                            </div>
                         </div>
@@ -236,8 +237,7 @@
                         <div class="mb-3">
                            <mat-form-field class="example-full-width">
                               <mat-label>Project Local Directory</mat-label>
-                              <input ngModel name="projectDir" id="projectDirEdit"
-                                 matInput placeholder="Project Local Directory">
+                              <input ngModel name="projectDir" id="projectDirEdit" matInput placeholder="Project Local Directory" [value]="appCommonInfoList[0]?.projectDir">
                            </mat-form-field>
                         </div>
    
@@ -245,15 +245,13 @@
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>Application Username</mat-label>
-                                 <input ngModel name="userNameApp" id="userNameAppEdit"
-                                    matInput placeholder="App Username" required>
+                                 <input ngModel name="userNameApp" id="userNameAppEdit" matInput placeholder="App Username" required [value]="appCommonInfoList[0]?.userNameApp">
                               </mat-form-field>
                            </div>
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>Application password</mat-label>
-                                 <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'"
-                                    matInput placeholder="App Password" required>
+                                 <input type="password" ngModel name="passwordApp" id="passwordAppEdit" [type]="hide ? 'password' : 'text'" matInput placeholder="App Password" required [value]="appCommonInfoList[0]?.passwordApp">
                                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                               </mat-form-field>
                            </div>
@@ -271,50 +269,58 @@
                         <mat-form-field class="example-full-width">
                            <mat-label>Username</mat-label>
                            <input ngModel name="userName" id="userName" matInput placeholder="pMage username"
-                              required>
+                              required value="{{currentUser}}">
                         </mat-form-field>
                         <h2>PMS</h2>
                         <div class="row gx-3 mb-3">
                            <div class="col-md-4">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Name</mat-label>
-                                 <input ngModel name="pmsName" id="pmsNameEdit" matInput placeholder="PMS Name"
-                                    required>
+                                 <mat-select [(value)]="selectedPMS" name="pmsName" id="pmsName" #pmsName placeholder="PMS Name" (selectionChange)="updateProcessInfo()">
+                                    <mat-option [value]="pms" *ngFor="let pms of pmsList">{{pms}}</mat-option>
+                                 </mat-select>
                               </mat-form-field>
                            </div>
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Url</mat-label>
-                                 <input ngModel name="pmsUrl" id="pmsUrlEdit" matInput placeholder="PMS Url"
-                                    required>
+                                 <input ngModel name="pmsUrl" id="pmsUrl" #pmsUrl matInput placeholder="PMS Url" [value]="pmsCommonInfoList[0]?.pmsUrl" required>
                               </mat-form-field>
                            </div>
                         </div>
-                        
-                        
-                        <div class="mb-3">
-                           <mat-form-field class="example-full-width">
-                              <mat-label>PMS Process Instance Id</mat-label>
-                              <input ngModel name="processId" id="processIdEdit"
-                                 matInput placeholder="PMS Process Instance ID">
-                           </mat-form-field>
-                        </div>
-                        
-   
+
+
                         <div class="row gx-3 mb-3">
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Username</mat-label>
-                                 <input ngModel name="userNamePms" matInput placeholder="Ex. John" id="userNamePmsEdit" required>
+                                 <input ngModel name="usernamePms" id="usernamePms" #usernamePms matInput placeholder="Ex. John" [value]="pmsCommonInfoList[0]?.userNamePms" required>
                               </mat-form-field>
                            </div>
                            <div class="col-md-6">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Password</mat-label>
-                                 <input type="password" ngModel name="passwordPms" id="passwordPmsEdit" [type]="hide ? 'password' : 'text'"
-                                    matInput placeholder="PMS Password" required>
+                                 <input type="password" ngModel name="passwordPms" id="passwordPms" #passwordPms [type]="hide ? 'password' : 'text'" matInput placeholder="PMS Password" [value]="pmsCommonInfoList[0]?.passwordPms" required>
                                  <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                               </mat-form-field>
+                           </div>
+                        </div>
+                        
+                        <div class="row gx-3 mb-3">
+                           <div class="col-md-8">
+                              <mat-form-field class="example-full-width">
+                                 <mat-label>PMS Process Instance Name</mat-label>
+                                 <input ngModel name="processDef" id="processDef" #processDef
+                                    matInput placeholder="PMS Process Instance Name">
+                              </mat-form-field>
+                           </div>
+                           <div class="col-md-4">
+                              <mat-form-field>
+                                 <mat-select [(value)]="selectedCaseId"  placeholder="PMS Process Instance Id" (selectionChange)="updateProcessInstanceId(pmsName.value, pmsUrl.value, usernamePms.value, passwordPms.value, processDef.value)">
+                                   <mat-option value="reload">Reload</mat-option>
+                                   <mat-option [value]="caseId" *ngFor="let caseId of caseIdList">{{caseId}}</mat-option>
+                                 </mat-select>
+                               </mat-form-field>
                            </div>
                         </div>
                      

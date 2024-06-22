@@ -11,6 +11,7 @@ import { UserPMage } from './interface/userpmage';
 import { FileUploadService } from './services/file-upload.service';
 import { Observable } from 'rxjs';
 import { PMSScore } from './interface/pmsscore';
+import { AppScore } from './interface/appscore';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { PMSScore } from './interface/pmsscore';
 export class AppComponent implements OnInit {
   public connectorList: Connector[] = [];
   public pmsList: string[] = [];
+  public appList: string[] = [];
   public editConnector!: Connector;
   public deleteConnector!: Connector;
   public monitoringConnector!: Connector;
@@ -40,6 +42,9 @@ export class AppComponent implements OnInit {
   pmsCommonInfoList: PMSScore[] = [];
   caseIdList: string[] = [];
   selectedCaseId: string = "";
+
+  selectedApp: string = ""
+  appCommonInfoList: AppScore[] = [];
 
   projectMode: string = "";
   currentFile?: File;
@@ -438,7 +443,21 @@ export class AppComponent implements OnInit {
           this.pmsCommonInfoList = response;
         },
         (error: HttpErrorResponse) => {
-          alert("No process instance found for the following information. Please try again.");
+          alert("No pms configuration found for the following information. Please try again.");
+        }
+      );
+    }
+  }
+
+  public updateAppInfo(): void {
+    if (this.currentUser !== "" && this.selectedApp !== "") {
+      this.connectorService.getCommonAppInfo(this.currentUser, this.selectedApp).subscribe(
+        (response: AppScore[]) => {
+          console.log(response);
+          this.appCommonInfoList = response;
+        },
+        (error: HttpErrorResponse) => {
+          alert("No app configuration found for the following information. Please try again.");
         }
       );
     }

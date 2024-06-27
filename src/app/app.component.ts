@@ -53,13 +53,13 @@ export class AppComponent implements OnInit {
   fileName = 'Select File';
   fileInfos?: Observable<any>;
 
-
   constructor(private connectorService: ConnectorService, private uploadService: FileUploadService) { }
 
 
   ngOnInit(): void {
     this.getConnectors();
     this.getPMSList();
+    this.getAppList();
 
     this.pmsFunctions.set('login', 'Authentication information to access process instance in the PMS. Ex: http://localhost:8080/bonita/loginservice');
     this.pmsFunctions.set('verify', 'Process Instance availability verification. Ex: http://localhost:8080/bonita/API/bpm/case/{processInstanceId}',);
@@ -78,7 +78,17 @@ export class AppComponent implements OnInit {
     this.connectorService.getPMSList().subscribe(
       (response: string[]) => {
         this.pmsList = response;
-        console.log(this.pmsList);
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
+  public getAppList(): void {
+    this.connectorService.getAppList().subscribe(
+      (response: string[]) => {
+        this.appList = response;
       },
       (error: HttpErrorResponse) => {
         alert(error.message);
@@ -172,6 +182,23 @@ export class AppComponent implements OnInit {
       }
     )
   }
+
+  public onSuggestingApp(processName: string): void {
+    console.log(processName);
+    this.connectorService.getSuggestedApp(processName).subscribe(
+      (response: string) => {
+        console.log(response);
+        if (this.appList.indexOf(response) > -1)
+          this.appList.push(response)
+        this.selectedApp = response;
+        this.updateAppInfo();
+      },
+      (error: HttpErrorResponse) => {
+        alert(error.message);
+      }
+    );
+  }
+
 
   public onGenerateActionTable(connectorId: string): void {
     this.connectorService.generateActionLinkage(connectorId).subscribe(

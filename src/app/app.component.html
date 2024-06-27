@@ -199,8 +199,7 @@
                            <div class="col-md-8">
                               <mat-form-field class="example-full-width">
                                  <mat-label>PMS Process Instance Name</mat-label>
-                                 <input ngModel name="processDef" id="processDef" #processDef
-                                    matInput placeholder="PMS Process Instance Name">
+                                 <input ngModel name="processDef" id="processDef" #processDef matInput placeholder="PMS Process Instance Name" (change)="onSuggestingApp(processDef.value)">
                               </mat-form-field>
                            </div>
                            <div class="col-md-4">

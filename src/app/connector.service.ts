@@ -100,4 +100,8 @@ export class ConnectorService {
     public getCommonAppInfo(userName: string, appName: string): Observable<AppScore[]> {
         return this.http.get<AppScore[]>(`${this.apiServerUrl}/pmage/user/${userName}/app-info`, {params: {selectedApp: appName}})
     }
+
+    public getSuggestedApp(processName: string): Observable<string> {
+        return this.http.get(`${this.apiServerUrl}/api/pmage/suggested-app`, {params: {processName: processName}, responseType: 'text'})
+    }
 }
